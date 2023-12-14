@@ -1,0 +1,6 @@
+{
+  "ExcelFilePath": "./excel",
+  "ExportFilePath": "../Assets/json",
+  "CodeGenerateFilePath": "../Assets/Scripts",
+  "ProjectFilePath": ".."
+}

@@ -1,0 +1,167 @@
+[
+    {
+        "Id": 1001,
+        "Type": 1,
+        "Param": [
+            2,
+            0.25
+        ],
+        "FeatureName": "Features_1001",
+        "FeatureTips": "FeaturesDes_1001",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1002,
+        "Type": 1,
+        "Param": [
+            3,
+            0.25
+        ],
+        "FeatureName": "Features_1002",
+        "FeatureTips": "FeaturesDes_1002",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1003,
+        "Type": 1,
+        "Param": [
+            4,
+            0.1
+        ],
+        "FeatureName": "Features_1003",
+        "FeatureTips": "FeaturesDes_1003",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1004,
+        "Type": 1,
+        "Param": [
+            5,
+            0.5
+        ],
+        "FeatureName": "Features_1004",
+        "FeatureTips": "FeaturesDes_1004",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1005,
+        "Type": 1,
+        "Param": [
+            6,
+            1
+        ],
+        "FeatureName": "Features_1005",
+        "FeatureTips": "FeaturesDes_1005",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1006,
+        "Type": 2,
+        "Param": [
+            2,
+            0.25
+        ],
+        "FeatureName": "Features_1006",
+        "FeatureTips": "FeaturesDes_1006",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1007,
+        "Type": 2,
+        "Param": [
+            3,
+            0.25
+        ],
+        "FeatureName": "Features_1007",
+        "FeatureTips": "FeaturesDes_1007",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1008,
+        "Type": 2,
+        "Param": [
+            4,
+            0.1
+        ],
+        "FeatureName": "Features_1008",
+        "FeatureTips": "FeaturesDes_1008",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1009,
+        "Type": 2,
+        "Param": [
+            5,
+            0.5
+        ],
+        "FeatureName": "Features_1009",
+        "FeatureTips": "FeaturesDes_1009",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1010,
+        "Type": 2,
+        "Param": [
+            6,
+            1
+        ],
+        "FeatureName": "Features_1010",
+        "FeatureTips": "FeaturesDes_1010",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000101,
+        "Type": 1,
+        "Param": [
+            9,
+            0.3
+        ],
+        "FeatureName": "Features_1000101",
+        "FeatureTips": "FeaturesDes_1000101",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000102,
+        "Type": 2,
+        "Param": [
+            10,
+            0.5
+        ],
+        "FeatureName": "Features_1000102",
+        "FeatureTips": "FeaturesDes_1000102",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000103,
+        "Type": 1,
+        "Param": [
+            6,
+            0.3
+        ],
+        "FeatureName": "Features_1000103",
+        "FeatureTips": "FeaturesDes_1000103",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000201,
+        "Type": 2,
+        "Param": [
+            9,
+            0.5
+        ],
+        "FeatureName": "Features_1000201",
+        "FeatureTips": "FeaturesDes_1000201",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000202,
+        "Type": 3,
+        "Param": [
+            1,
+            0.3
+        ],
+        "FeatureName": "Features_1000202",
+        "FeatureTips": "FeaturesDes_1000202",
+        "FeatureTipsDetail": ""
+    }
+]

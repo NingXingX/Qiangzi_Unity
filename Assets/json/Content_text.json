@@ -1,0 +1,398 @@
+[
+    {
+        "TextName": "CharTitle_001",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士",
+        "EnglishTranslate": "FootMan"
+    },
+    {
+        "TextName": "CharTitle_002",
+        "ContentType": 1,
+        "ChineseTranslate": "弓手",
+        "EnglishTranslate": "Archer"
+    },
+    {
+        "TextName": "CharDes_001",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士的职业介绍",
+        "EnglishTranslate": "CharDes_001"
+    },
+    {
+        "TextName": "CharDes_002",
+        "ContentType": 1,
+        "ChineseTranslate": "弓手的职业介绍",
+        "EnglishTranslate": "CharDes_002"
+    },
+    {
+        "TextName": "CharName_001",
+        "ContentType": 2,
+        "ChineseTranslate": "CharName_001",
+        "EnglishTranslate": "CharName_001"
+    },
+    {
+        "TextName": "CharName_002",
+        "ContentType": 2,
+        "ChineseTranslate": "CharName_002",
+        "EnglishTranslate": "CharName_002"
+    },
+    {
+        "TextName": "AttrName_001",
+        "ContentType": 1,
+        "ChineseTranslate": "等级",
+        "EnglishTranslate": "Level"
+    },
+    {
+        "TextName": "AttrName_002",
+        "ContentType": 1,
+        "ChineseTranslate": "生命值",
+        "EnglishTranslate": "Hp"
+    },
+    {
+        "TextName": "AttrName_003",
+        "ContentType": 1,
+        "ChineseTranslate": "生命回复",
+        "EnglishTranslate": "HpRegeneration"
+    },
+    {
+        "TextName": "AttrName_004",
+        "ContentType": 1,
+        "ChineseTranslate": "生命窃取",
+        "EnglishTranslate": "HpSteal"
+    },
+    {
+        "TextName": "AttrName_005",
+        "ContentType": 1,
+        "ChineseTranslate": "护盾值",
+        "EnglishTranslate": "Shields"
+    },
+    {
+        "TextName": "AttrName_006",
+        "ContentType": 1,
+        "ChineseTranslate": "护盾回复",
+        "EnglishTranslate": "ShieldsRegeneration"
+    },
+    {
+        "TextName": "AttrName_007",
+        "ContentType": 1,
+        "ChineseTranslate": "迅捷值",
+        "EnglishTranslate": "ActionNum"
+    },
+    {
+        "TextName": "AttrName_008",
+        "ContentType": 1,
+        "ChineseTranslate": "移速",
+        "EnglishTranslate": "Speed"
+    },
+    {
+        "TextName": "AttrName_009",
+        "ContentType": 1,
+        "ChineseTranslate": "物理强度",
+        "EnglishTranslate": "PhysicalIntensity"
+    },
+    {
+        "TextName": "AttrName_010",
+        "ContentType": 1,
+        "ChineseTranslate": "魔法强度",
+        "EnglishTranslate": "ManaIntensity"
+    },
+    {
+        "TextName": "AttrName_011",
+        "ContentType": 1,
+        "ChineseTranslate": "虔诚强度",
+        "EnglishTranslate": "ReligiousIntensity"
+    },
+    {
+        "TextName": "AttrName_012",
+        "ContentType": 1,
+        "ChineseTranslate": "防御强度",
+        "EnglishTranslate": "ArmorIntensity"
+    },
+    {
+        "TextName": "AttrName_013",
+        "ContentType": 1,
+        "ChineseTranslate": "暴击率",
+        "EnglishTranslate": "CritRate"
+    },
+    {
+        "TextName": "AttrName_014",
+        "ContentType": 1,
+        "ChineseTranslate": "命中率",
+        "EnglishTranslate": "HitRate"
+    },
+    {
+        "TextName": "AttrName_015",
+        "ContentType": 1,
+        "ChineseTranslate": "闪避率",
+        "EnglishTranslate": "DodgeRate"
+    },
+    {
+        "TextName": "Features_1001",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性1",
+        "EnglishTranslate": "Features_1001"
+    },
+    {
+        "TextName": "Features_1002",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性2",
+        "EnglishTranslate": "Features_1002"
+    },
+    {
+        "TextName": "Features_1003",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性3",
+        "EnglishTranslate": "Features_1003"
+    },
+    {
+        "TextName": "Features_1004",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性4",
+        "EnglishTranslate": "Features_1004"
+    },
+    {
+        "TextName": "Features_1005",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性5",
+        "EnglishTranslate": "Features_1005"
+    },
+    {
+        "TextName": "Features_1006",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性6",
+        "EnglishTranslate": "Features_1006"
+    },
+    {
+        "TextName": "Features_1007",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性7",
+        "EnglishTranslate": "Features_1007"
+    },
+    {
+        "TextName": "Features_1008",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性8",
+        "EnglishTranslate": "Features_1008"
+    },
+    {
+        "TextName": "Features_1009",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性9",
+        "EnglishTranslate": "Features_1009"
+    },
+    {
+        "TextName": "Features_1010",
+        "ContentType": 1,
+        "ChineseTranslate": "通用特性10",
+        "EnglishTranslate": "Features_1010"
+    },
+    {
+        "TextName": "Features_1000101",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士1特性",
+        "EnglishTranslate": "Features_1000101"
+    },
+    {
+        "TextName": "Features_1000102",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士2特性",
+        "EnglishTranslate": "Features_1000102"
+    },
+    {
+        "TextName": "Features_1000103",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士3特性",
+        "EnglishTranslate": "Features_1000103"
+    },
+    {
+        "TextName": "Features_1000201",
+        "ContentType": 1,
+        "ChineseTranslate": "弓手1特性",
+        "EnglishTranslate": "Features_1000201"
+    },
+    {
+        "TextName": "Features_1000202",
+        "ContentType": 1,
+        "ChineseTranslate": "弓手2特性",
+        "EnglishTranslate": "Features_1000202"
+    },
+    {
+        "TextName": "FeaturesDes_1001",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述1",
+        "EnglishTranslate": "FeaturesDes_1001"
+    },
+    {
+        "TextName": "FeaturesDes_1002",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述2",
+        "EnglishTranslate": "FeaturesDes_1002"
+    },
+    {
+        "TextName": "FeaturesDes_1003",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述3",
+        "EnglishTranslate": "FeaturesDes_1003"
+    },
+    {
+        "TextName": "FeaturesDes_1004",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述4",
+        "EnglishTranslate": "FeaturesDes_1004"
+    },
+    {
+        "TextName": "FeaturesDes_1005",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述5",
+        "EnglishTranslate": "FeaturesDes_1005"
+    },
+    {
+        "TextName": "FeaturesDes_1006",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述6",
+        "EnglishTranslate": "FeaturesDes_1006"
+    },
+    {
+        "TextName": "FeaturesDes_1007",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述7",
+        "EnglishTranslate": "FeaturesDes_1007"
+    },
+    {
+        "TextName": "FeaturesDes_1008",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述8",
+        "EnglishTranslate": "FeaturesDes_1008"
+    },
+    {
+        "TextName": "FeaturesDes_1009",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述9",
+        "EnglishTranslate": "FeaturesDes_1009"
+    },
+    {
+        "TextName": "FeaturesDes_1010",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述10",
+        "EnglishTranslate": "FeaturesDes_1010"
+    },
+    {
+        "TextName": "FeaturesDes_1000101",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述100101",
+        "EnglishTranslate": "FeaturesDes_1000101"
+    },
+    {
+        "TextName": "FeaturesDes_1000102",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述100102",
+        "EnglishTranslate": "FeaturesDes_1000102"
+    },
+    {
+        "TextName": "FeaturesDes_1000103",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述100103",
+        "EnglishTranslate": "FeaturesDes_1000103"
+    },
+    {
+        "TextName": "FeaturesDes_1000201",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述100201",
+        "EnglishTranslate": "FeaturesDes_1000201"
+    },
+    {
+        "TextName": "FeaturesDes_1000202",
+        "ContentType": 1,
+        "ChineseTranslate": "特性描述100202",
+        "EnglishTranslate": "FeaturesDes_1000202"
+    },
+    {
+        "TextName": "FeaturesDesDetail_1000101",
+        "ContentType": 1,
+        "ChineseTranslate": "特性详细描述1",
+        "EnglishTranslate": "FeaturesDesDetail_1000101"
+    },
+    {
+        "TextName": "FeaturesDesDetail_1000102",
+        "ContentType": 1,
+        "ChineseTranslate": "特性详细描述2",
+        "EnglishTranslate": "FeaturesDesDetail_1000102"
+    },
+    {
+        "TextName": "FeaturesDesDetail_1000103",
+        "ContentType": 1,
+        "ChineseTranslate": "特性详细描述3",
+        "EnglishTranslate": "FeaturesDesDetail_1000103"
+    },
+    {
+        "TextName": "FeaturesDesDetail_1000201",
+        "ContentType": 1,
+        "ChineseTranslate": "特性详细描述4",
+        "EnglishTranslate": "FeaturesDesDetail_1000201"
+    },
+    {
+        "TextName": "FeaturesDesDetail_1000202",
+        "ContentType": 1,
+        "ChineseTranslate": "特性详细描述5",
+        "EnglishTranslate": "FeaturesDesDetail_1000202"
+    },
+    {
+        "TextName": "EquipName_10011",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:FFFFFF>长剑<clour>",
+        "EnglishTranslate": "<colur:FFFFFF>sword<clour>"
+    },
+    {
+        "TextName": "EquipName_10012",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:50C3F7>长剑<clour>",
+        "EnglishTranslate": "<colur:50C3F7>sword<clour>"
+    },
+    {
+        "TextName": "EquipName_10013",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:FDD834>长剑<clour>",
+        "EnglishTranslate": "<colur:FDD834>sword<clour>"
+    },
+    {
+        "TextName": "EquipName_10014",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:2CD551en>长剑<clour>",
+        "EnglishTranslate": "<colur:2CD551en>sword<clour>"
+    },
+    {
+        "TextName": "EquipName_10015",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:2CD551>长剑<clour>",
+        "EnglishTranslate": "<colur:2CD551>sword<clour>"
+    },
+    {
+        "TextName": "EquipName_10016",
+        "ContentType": 1,
+        "ChineseTranslate": "<colur:FF5252>长剑<clour>",
+        "EnglishTranslate": "<colur:FF5252>sword<clour>"
+    },
+    {
+        "TextName": "CurrencyName_001",
+        "ContentType": 1,
+        "ChineseTranslate": "灵魂币",
+        "EnglishTranslate": "CurrencyName_001"
+    },
+    {
+        "TextName": "CurrencyName_002",
+        "ContentType": 1,
+        "ChineseTranslate": "勇士勋章",
+        "EnglishTranslate": "CurrencyName_002"
+    },
+    {
+        "TextName": "CurrencyDes_001",
+        "ContentType": 1,
+        "ChineseTranslate": "CurrencyDes_001",
+        "EnglishTranslate": "CurrencyDes_001"
+    },
+    {
+        "TextName": "CurrencyDes_002",
+        "ContentType": 1,
+        "ChineseTranslate": "CurrencyDes_002",
+        "EnglishTranslate": "CurrencyDes_002"
+    }
+]

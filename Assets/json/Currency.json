@@ -1,0 +1,12 @@
+[
+    {
+        "Id": 1,
+        "CurrencyName": "CurrencyName_001",
+        "CurrencyDes": "CurrencyDes_001"
+    },
+    {
+        "Id": 2,
+        "CurrencyName": "CurrencyName_002",
+        "CurrencyDes": "CurrencyDes_002"
+    }
+]

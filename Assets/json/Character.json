@@ -1,0 +1,32 @@
+[
+    {
+        "Id": 10001,
+        "CharTitle": "CharTitle_001",
+        "CharName": "CharName_001",
+        "CharDes": "CharDes_001",
+        "CharType": 1,
+        "CharSize": 1,
+        "CharAvatar": 10001,
+        "CharAttr": 10001,
+        "CharFeatures": 10001,
+        "CharAI": 1,
+        "EquipWeaponNum": 1,
+        "EquipArmorNum": 2,
+        "EquipJewelNum": 1
+    },
+    {
+        "Id": 10002,
+        "CharTitle": "CharTitle_002",
+        "CharName": "CharName_002",
+        "CharDes": "CharDes_002",
+        "CharType": 1,
+        "CharSize": 1,
+        "CharAvatar": 10002,
+        "CharAttr": 10002,
+        "CharFeatures": 10002,
+        "CharAI": 1,
+        "EquipWeaponNum": 2,
+        "EquipArmorNum": 1,
+        "EquipJewelNum": 1
+    }
+]
