@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//处于背包内装备的预制体脚本
 public class BagEquipmentEvents : MonoBehaviour
 {
     [Header("装备变量")]
@@ -15,6 +16,7 @@ public class BagEquipmentEvents : MonoBehaviour
 
     [Header("引用组件")]
     public Text levelText;
+    public GameObject equipInfoPanel;
 
 
 
@@ -28,6 +30,7 @@ public class BagEquipmentEvents : MonoBehaviour
     void Update()
     {
         transform.localScale = new Vector3(1f, 1f, 1f);
+        equipInfoPanel = GameObject.Find("背包装备信息面板");
     }
 
     public void GenerateRandomEquipID()
@@ -39,6 +42,7 @@ public class BagEquipmentEvents : MonoBehaviour
     //更新信息到面板
     public void DisplayEquipInfo(int equipmentID)
     {
+
         Transform level = transform.Find("背包装备等级文本");
         if ( level != null )
         {
@@ -47,5 +51,11 @@ public class BagEquipmentEvents : MonoBehaviour
             levelText = level.GetComponent<Text>();
             levelText.text = equip.Grade.ToString();
         }
+    }
+
+    public void SendEquipIDToUIManager()
+    {
+        UIManager.nowEquipID = thisEquipID;
+        print("UI管理器中当前的武器ID为：" + UIManager.nowEquipID);
     }
 }

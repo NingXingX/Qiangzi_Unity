@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+//角色状态栏预制体的脚本
 public class ChaStatsPrefab : MonoBehaviour
 {
     [Header("UI组件")]
@@ -16,6 +17,9 @@ public class ChaStatsPrefab : MonoBehaviour
     public Slider shieldSlider;
     //角色血量条组件
     public Slider hpSlider;
+
+    [Header("变量")]
+    public int prefabNumerInUI;
 
 
 
@@ -82,7 +86,7 @@ public class ChaStatsPrefab : MonoBehaviour
             shieldSlider = shieldslider.GetComponent<Slider>();
             float result = CharacterManager.nowChaShieldValue * 1.0f / cha_attributeData.Shields;
             shieldSlider.value = result;
-            print(shieldSlider.value);
+            //print(shieldSlider.value);
         }
 
         //改变角色血量条
@@ -96,7 +100,7 @@ public class ChaStatsPrefab : MonoBehaviour
             float result = CharacterManager.nowChaHpValue * 1.0f / cha_attributeData.Hp;
             shieldSlider.value = result;
             hpSlider.value = result;
-            print(hpSlider.value);
+            //print(hpSlider.value);
         }
     }
 
@@ -104,5 +108,7 @@ public class ChaStatsPrefab : MonoBehaviour
     {
         CharacterManager.nowChaLevel = CharacterLevel;
         CharacterManager.nowChaID = CharacterID;
+        UIManager.nowCharacterNumberInUI = prefabNumerInUI;
+        print("当前角色ID为：" + CharacterManager.nowChaID);
     }
 }

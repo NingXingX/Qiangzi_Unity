@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//角色技能栏内技能预制体的脚本
 public class CharacterSkillInfo : MonoBehaviour
 {
     public GameObject tooltipPanel; // 信息面板的引用

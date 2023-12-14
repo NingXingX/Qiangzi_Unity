@@ -15,6 +15,7 @@ public class UIEvents : MonoBehaviour
     public bool isEquipPanelActive = false;
 
 
+
     public void ToLevelSelect()
     {
         SceneManager.LoadScene(1);
@@ -84,4 +85,6 @@ public class UIEvents : MonoBehaviour
         chaEquipPanel.SetActive(true);
         isEquipPanelActive = true;
     }
+
+
 }

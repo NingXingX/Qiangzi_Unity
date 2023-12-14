@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//当前角色管理器
 public class CharacterManager : MonoBehaviour
 {
     //角色相关全局变量

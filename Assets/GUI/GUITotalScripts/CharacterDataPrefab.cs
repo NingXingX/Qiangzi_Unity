@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//角色属性栏预制体的脚本
 public class CharacterDataPrefab : MonoBehaviour
 {
     [Header("属性变量")]
