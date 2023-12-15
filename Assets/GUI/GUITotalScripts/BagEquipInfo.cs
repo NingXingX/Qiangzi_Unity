@@ -27,7 +27,7 @@ public class BagEquipInfo : MonoBehaviour
 
     private void Start()
     {
-       
+        ChangeCanvasGroup();
     }
 
     private void Update()
@@ -120,5 +120,21 @@ public class BagEquipInfo : MonoBehaviour
         UIManager.nowCharacterEquipNumber[UIManager.nowCharacterNumberInUI]++;
         print("UI管理器中的当前角色装备数量为：" + UIManager.nowCharacterEquipNumber[UIManager.nowCharacterNumberInUI]);
         print("UI管理器的装备数组为:" + UIManager.EquipIDArray);
+    }
+
+    //开始时改变CanvasGroup
+    public void ChangeCanvasGroup()
+    {
+        // 获取CanvasGroup组件
+        CanvasGroup canvasGroup = GetComponent<CanvasGroup>();
+
+        // 设置透明度为0
+        canvasGroup.alpha = 0f;
+
+        // 禁用交互性
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        UIManager.isBagEquipInfoPanelActive = false;
     }
 }

@@ -58,4 +58,43 @@ public class BagEquipmentEvents : MonoBehaviour
         UIManager.nowEquipID = thisEquipID;
         print("UI管理器中当前的武器ID为：" + UIManager.nowEquipID);
     }
+
+    public void EquipController()
+    {
+        //当装备面板不可见时，要让他可见
+        if ( UIManager.isBagEquipInfoPanelActive == false )
+        {
+            //得到背包装备信息面板上的CanvasGroup组件
+            GameObject equipInfoPanel = GameObject.Find("背包装备信息面板");
+            CanvasGroup canvasGroup = equipInfoPanel.GetComponent<CanvasGroup>();
+
+            // 设置透明度为0
+            canvasGroup.alpha = 1f;
+
+            // 禁用交互性
+            canvasGroup.interactable = true;
+            canvasGroup.blocksRaycasts = true;
+
+            //改变变量
+            UIManager.isBagEquipInfoPanelActive = true;
+
+        }
+        /*//当面板可见时，如果是点击其他的装备，不能关闭
+        else if ( UIManager.isBagEquipInfoPanelActive == true )
+        {
+            //得到背包装备信息面板上的CanvasGroup组件
+            GameObject equipInfoPanel = GameObject.Find("背包装备信息面板");
+            CanvasGroup canvasGroup = equipInfoPanel.GetComponent<CanvasGroup>();
+
+            // 设置透明度为0
+            canvasGroup.alpha = 0f;
+
+            // 禁用交互性
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+
+            //改变变量
+            UIManager.isBagEquipInfoPanelActive = false;
+        }*/
+    }
 }

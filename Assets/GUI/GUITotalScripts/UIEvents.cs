@@ -10,10 +10,13 @@ public class UIEvents : MonoBehaviour
     //得到设置面板
     public GameObject settingPanel;
     public bool isSettingPanelActive = false;
+
     //得到角色装备面板
     public GameObject chaEquipPanel;
     public bool isEquipPanelActive = false;
 
+
+ 
 
 
     public void ToLevelSelect()
@@ -87,4 +90,20 @@ public class UIEvents : MonoBehaviour
     }
 
 
+    public void EquipInfoController()
+    {
+        //得到背包装备信息面板上的CanvasGroup组件
+        GameObject equipInfoPanel = GameObject.Find("背包装备信息面板");
+        CanvasGroup canvasGroup = equipInfoPanel.GetComponent<CanvasGroup>();
+
+        // 设置透明度为0
+        canvasGroup.alpha = 0f;
+
+        // 禁用交互性
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        //改变变量
+        UIManager.isBagEquipInfoPanelActive = false;
+    }
 }
