@@ -12,8 +12,8 @@ public class SpawnRoleAction : FsmStateAction
     public override void OnEnter()
     {
         var board = BoardMapCtrl.Instance;
-        board.SpawnRole(RoleObject, 1, 1, 1);
-        board.SpawnRole(RoleObject, 8, 8, 2);
+        board.SpawnRole(RoleObject, 1, 1, 1, 10001);
+        board.SpawnRole(RoleObject, 8, 8, 2, 10001);
         this.Finish();
     }
 }

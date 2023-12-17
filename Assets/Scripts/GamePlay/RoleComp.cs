@@ -10,6 +10,20 @@ public class RoleComp : MonoBehaviour
     public ulong Gid;
     public int TeamId;
 
+    public Role data;
+
+    public void Init(int characterID, int level = 1)
+    {
+        this.data = new Role();
+        this.data.Init(characterID, this, level);
+
+    }
+
+    public void AddComp(int equipId)
+    {
+        this.data.AddEquip(equipId);
+    }
+
     void Start()
     {
         

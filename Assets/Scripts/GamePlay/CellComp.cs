@@ -15,6 +15,7 @@ public class CellComp : MonoBehaviour, IPointerClickHandler
 
     public void Init(int row, int col, Vector2 size, BoardMapCtrl board)
     {
+        this.rect = this.transform as RectTransform;
         this.Row_Id = row;
         this.Col_Id = col;
         this.rect.sizeDelta = size;

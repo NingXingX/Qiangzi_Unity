@@ -42,6 +42,77 @@ public class BoardMapCtrl : MonoBehaviour
         this.ChooseTarget = null;
         this.gidCnt = 1000000;
         this.roleDic = new Dictionary<ulong, RoleComp>();
+        this.InstantiateBoard();
+    }
+
+    public Vector2 CalcCellLocalPos(int row, int col)
+    {
+        int cellWidth = this.Width / this.ColNum;
+        int cellHeght = this.Height / this.RowNum;
+        return new Vector2(col * cellWidth, row * cellHeght);
+    }
+
+    public void SpawnRole(GameObject role, int row, int col, int team, int characterId, int level = 1)
+    {
+        var roleObject = Instantiate(role, this.transform);
+        var roleRect = roleObject.transform as RectTransform;
+        roleRect.pivot = Vector2.zero;
+        roleRect.anchorMin = Vector2.zero;
+        roleRect.anchorMax = Vector2.zero;
+        roleRect.sizeDelta = new Vector2(this.cellWidth, this.cellHeght);
+        roleRect.anchoredPosition = this.CalcCellLocalPos(row, col);
+        var comp = roleObject.GetComponent<RoleComp>();
+        comp.Gid = ++this.gidCnt;
+        comp.RowPos = row;
+        comp.ColPos = col;
+        comp.TeamId = team;
+        comp.Init(characterId, level);
+        comp.AddComp(10011);
+        this.roleDic[comp.Gid] = comp;
+    }
+
+    public ulong GetRoleGidAtPos(int row, int col)
+    {
+        foreach (var pair in roleDic)
+        {
+            ulong gid = pair.Key;
+            var comp = pair.Value;
+            if (comp.RowPos == row && comp.ColPos == col)
+            {
+                return gid;
+            }
+        }
+        return 0;
+    }
+
+    public Dictionary<ulong, RoleComp> GetRoleDic()
+    {
+        return this.roleDic;
+    }
+
+    public RoleComp GetRoleCompByGid(ulong gid)
+    {
+        RoleComp ret;
+        if(this.roleDic.TryGetValue(gid,out ret))
+        {
+            return ret;
+        }
+        return null;
+    }
+
+    public void OnCellClick(int row, int col)
+    {
+        Debug.Log((row, col));
+        var newTarget = this.cellMap[row, col];
+        var oldTarget = this.ChooseTarget;
+        this.ChooseTarget = newTarget;
+        this.ChooseTargetChange?.Invoke(oldTarget, newTarget);
+    }
+
+    #region Editor
+    public void InstantiateBoard()
+    {
+        this.DestoryBoard();
         var boardRect = this.transform as RectTransform;
         boardRect.sizeDelta = new Vector2(this.Width, this.Height);
         this.cellWidth = this.Width / this.ColNum;
@@ -64,61 +135,24 @@ public class BoardMapCtrl : MonoBehaviour
             }
         }
     }
-
-    public Vector2 CalcCellLocalPos(int row, int col)
+    public void DestoryBoard()
     {
-        int cellWidth = this.Width / this.ColNum;
-        int cellHeght = this.Height / this.RowNum;
-        return new Vector2(col * cellWidth, row * cellHeght);
-    }
-
-    public void SpawnRole(GameObject role, int row, int col,int team)
-    {
-        var roleObject = Instantiate(role, this.transform);
-        var roleRect = roleObject.transform as RectTransform;
-        roleRect.pivot = Vector2.zero;
-        roleRect.anchorMin = Vector2.zero;
-        roleRect.anchorMax = Vector2.zero;
-        roleRect.sizeDelta = new Vector2(this.cellWidth, this.cellHeght);
-        roleRect.anchoredPosition = this.CalcCellLocalPos(row, col);
-        var comp = roleObject.GetComponent<RoleComp>();
-        comp.Gid = ++this.gidCnt;
-        comp.RowPos = row;
-        comp.ColPos = col;
-        comp.TeamId = team;
-        this.roleDic[comp.Gid] = comp;
-    }
-
-    public ulong GetRoleGidAtPos(int row, int col)
-    {
-        foreach (var pair in roleDic)
+        if (this.cellMap != null)
         {
-            ulong gid = pair.Key;
-            var comp = pair.Value;
-            if (comp.RowPos == row && comp.ColPos == col)
+            foreach (var cell in cellMap)
             {
-                return gid;
+                if (cell != null)
+                {
+                    DestroyImmediate(cell.gameObject);
+                }
             }
+            this.cellMap = null;
         }
-        return 0;
-    }
-
-    public RoleComp GetRoleCompByGid(ulong gid)
-    {
-        RoleComp ret;
-        if(this.roleDic.TryGetValue(gid,out ret))
+        var cellList = this.transform.GetComponentsInChildren<CellComp>();
+        foreach (var cell in cellList)
         {
-            return ret;
+            DestroyImmediate(cell.gameObject);
         }
-        return null;
     }
-
-    public void OnCellClick(int row, int col)
-    {
-        Debug.Log((row, col));
-        var newTarget = this.cellMap[row, col];
-        var oldTarget = this.ChooseTarget;
-        this.ChooseTarget = newTarget;
-        this.ChooseTargetChange?.Invoke(oldTarget, newTarget);
-    }
+    #endregion
 }
