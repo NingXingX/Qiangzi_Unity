@@ -7,12 +7,10 @@ using HutongGames.PlayMaker;
 public class RoleMoveAction : FsmStateAction
 {
     private List<MovePlan> moveList;
-    private int cnt;
 
     public override void OnEnter()
     {
-        cnt = 0;
-        moveList = MovePlanManager.Instance.CurMovePlan;
+        this.moveList = MovePlanManager.Instance.CurMovePlan;
         StartCoroutine(StartMove());
     }
 
@@ -20,28 +18,19 @@ public class RoleMoveAction : FsmStateAction
     {
         foreach (var move in this.moveList)
         {
-            StartCoroutine(MoveFunc(move));
-            yield return new WaitForSeconds(0.5f);
+            yield return StartCoroutine(MoveFunc(move));
         }
-        while (true)
-        {
-            if (cnt == moveList.Count)
-            {
-                this.Finish();
-                yield break;
-            }
-            Debug.Log(string.Format("WaitMove {0}/{1}", cnt, moveList.Count));
-            yield return new WaitForSeconds(0.5f);
-        }
+        this.Finish();
+        yield break;
     }
 
     private IEnumerator MoveFunc(MovePlan move)
     {
-        var role = BoardMapCtrl.Instance.GetRoleCompByGid(move.Gid);
+        var role = RoleSystem.Instance.GetRoleByGid(move.Gid);
         Vector2 curPos = BoardMapCtrl.Instance.CalcCellLocalPos(role.RowPos, role.ColPos);
         Vector2 toPos = BoardMapCtrl.Instance.CalcCellLocalPos(move.TargetRow, move.TargetCol);
         float t = 0;
-        var rect = role.transform as RectTransform;
+        var rect = role.OwnComp.transform as RectTransform;
         while (t <= 1)
         {
             t += Time.deltaTime;
@@ -50,7 +39,6 @@ public class RoleMoveAction : FsmStateAction
         }
         role.RowPos = move.TargetRow;
         role.ColPos = move.TargetCol;
-        ++cnt;
         yield break;
     }
 }

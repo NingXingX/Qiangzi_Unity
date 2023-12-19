@@ -28,10 +28,6 @@ public class BoardMapCtrl : MonoBehaviour
     private int cellHeght;
     private CellComp[,] cellMap;
 
-    private ulong gidCnt;
-
-    private Dictionary<ulong, RoleComp> roleDic;
-
     private void Awake()
     {
         instance = this;
@@ -40,8 +36,6 @@ public class BoardMapCtrl : MonoBehaviour
     void Start()
     {
         this.ChooseTarget = null;
-        this.gidCnt = 1000000;
-        this.roleDic = new Dictionary<ulong, RoleComp>();
         this.InstantiateBoard();
     }
 
@@ -52,28 +46,24 @@ public class BoardMapCtrl : MonoBehaviour
         return new Vector2(col * cellWidth, row * cellHeght);
     }
 
-    public void SpawnRole(GameObject role, int row, int col, int team, int characterId, int level = 1)
+    public void SpawnRoleObject(GameObject role, ulong gid)
     {
         var roleObject = Instantiate(role, this.transform);
-        var roleRect = roleObject.transform as RectTransform;
-        roleRect.pivot = Vector2.zero;
-        roleRect.anchorMin = Vector2.zero;
-        roleRect.anchorMax = Vector2.zero;
-        roleRect.sizeDelta = new Vector2(this.cellWidth, this.cellHeght);
-        roleRect.anchoredPosition = this.CalcCellLocalPos(row, col);
         var comp = roleObject.GetComponent<RoleComp>();
-        comp.Gid = ++this.gidCnt;
-        comp.RowPos = row;
-        comp.ColPos = col;
-        comp.TeamId = team;
-        comp.Init(characterId, level);
-        comp.AddComp(10011);
-        this.roleDic[comp.Gid] = comp;
+        comp.InitObject(this.cellWidth, this.cellHeght);
+        comp.BindData(gid);
+    }
+
+    public ulong SpawnRole(GameObject role, int team, int characterId, int level = 1, int rowPos = 0, int colPos = 0)
+    {
+        ulong gid = RoleSystem.Instance.SpawnRole(team, characterId, level, rowPos, colPos);
+        this.SpawnRoleObject(role, gid);
+        return gid;
     }
 
     public ulong GetRoleGidAtPos(int row, int col)
     {
-        foreach (var pair in roleDic)
+        foreach (var pair in RoleSystem.Instance.GetRoleDic())
         {
             ulong gid = pair.Key;
             var comp = pair.Value;
@@ -83,21 +73,6 @@ public class BoardMapCtrl : MonoBehaviour
             }
         }
         return 0;
-    }
-
-    public Dictionary<ulong, RoleComp> GetRoleDic()
-    {
-        return this.roleDic;
-    }
-
-    public RoleComp GetRoleCompByGid(ulong gid)
-    {
-        RoleComp ret;
-        if(this.roleDic.TryGetValue(gid,out ret))
-        {
-            return ret;
-        }
-        return null;
     }
 
     public void OnCellClick(int row, int col)
