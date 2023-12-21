@@ -6,6 +6,9 @@ public class RoleEquip
     public RoleComp OwnComp;
 
     public int Id;
+    public int BaseAttack;
+    public float AttackSpeed;
+    public int AttackRange;
 
     public void Init(int equipId, RoleComp ownComp)
     {
@@ -17,5 +20,8 @@ public class RoleEquip
         this.Id = equipId;
 
         this.OwnComp = ownComp;
+        this.BaseAttack = this.equip.Attack;
+        this.AttackSpeed = this.equip.AttackSpeed;
+        this.AttackRange = this.equip.AttackRange;
     }
 }

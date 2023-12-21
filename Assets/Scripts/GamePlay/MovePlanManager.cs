@@ -35,41 +35,82 @@ class MovePlanManager
         }
     }
 
-    private List<MovePlan> inQueue = new List<MovePlan>();
     public List<MovePlan> CurMovePlan = new List<MovePlan>();
+    private Dictionary<(int, int), ulong> curMoveTarget = new Dictionary<(int, int), ulong>();
+    private Dictionary<ulong, (int, int)> roleMoveTarget = new Dictionary<ulong, (int, int)>();
 
-    public void AddMovePlan(ulong gid, int team, int row, int col)
+    public void EnterNewMoveState()
     {
-        this.inQueue.Add(new MovePlan(gid, team, row, col));
+        this.curMoveTarget.Clear();
+        this.roleMoveTarget.Clear();
+    }
+
+    public void AddMovePlan(ulong gid, int row, int col)
+    {
+        if (this.curMoveTarget.ContainsKey((row, col)))
+        {
+            Debug.Log("目的地已被占用");
+            return;
+        }
+        Role data = RoleSystem.Instance.GetRoleByGid(gid);
+        int dis = this.Distance(data, row, col);
+        if (dis == 0 || dis > data.Speed)
+        {
+            Debug.Log("移动距离不能为0或大于速度");
+            return;
+        }
+        this.curMoveTarget[(row, col)] = gid;
+        this.roleMoveTarget[gid] = (row, col);
         Debug.Log(string.Format("{0} ready move to {1},{2}", gid, row, col));
     }
 
     public void GetRoundMove()
     {
-        List<MovePlan> waitMovePlan = new List<MovePlan>();
         this.CurMovePlan.Clear();
-        foreach (var move in this.inQueue)
+        foreach (var pair in this.roleMoveTarget)
         {
-            var role = BoardMapCtrl.Instance.GetRoleCompByGid(move.Gid);
-            if (role.RowPos == move.TargetRow && role.ColPos == move.TargetCol)
+            ulong gid = pair.Key;
+            int row = pair.Value.Item1;
+            int col = pair.Value.Item2;
+            var role = RoleSystem.Instance.GetRoleByGid(gid);
+            int dis = this.Distance(role, row, col);
+            if (dis == 0)
             {
                 continue;
             }
-            waitMovePlan.Add(move);
-            var curMove = new MovePlan(move.Gid, move.Team, role.RowPos, role.ColPos);
-            int distance = move.TargetRow - role.RowPos;
-            if (distance != 0)
-            {
-                curMove.TargetRow += distance / Mathf.Abs(distance);
-            }
-            else
-            {
-                distance = move.TargetCol - role.ColPos;
-                curMove.TargetCol += distance / Mathf.Abs(distance);
-            }
+            var curMove = new MovePlan(gid, role.TeamId, role.RowPos, role.ColPos);
+            var nxt = GetNextPosition(role, row, col);
+            curMove.TargetRow = nxt.Item1;
+            curMove.TargetCol = nxt.Item2;
             this.CurMovePlan.Add(curMove);
         }
-        this.inQueue = waitMovePlan;
+        this.SortMovePlan();
     }
 
+    private (int, int) GetNextPosition(Role role, int row, int col)
+    {
+        int tr = role.RowPos;
+        int tc = role.ColPos;
+        int distance = row - role.RowPos;
+        if (distance != 0)
+        {
+            tr += distance / Mathf.Abs(distance);
+        }
+        else
+        {
+            distance = col - role.ColPos;
+            tc += distance / Mathf.Abs(distance);
+        }
+        return (tr, tc);
+    }
+
+    private void SortMovePlan()
+    {
+        //todo
+    }
+
+    private int Distance(Role role, int row, int col)
+    {
+        return Mathf.Abs(row - role.RowPos) + Mathf.Abs(col - role.ColPos);
+    }
 }

@@ -12,8 +12,21 @@ public class SpawnRoleAction : FsmStateAction
     public override void OnEnter()
     {
         var board = BoardMapCtrl.Instance;
-        board.SpawnRole(RoleObject, 1, 1, 1, 10001);
-        board.SpawnRole(RoleObject, 8, 8, 2, 10001);
+
+        this.DebugSpawnRole(10001, 1, 1, 1, 1, new List<int> { 10011, 10012 });
+        this.DebugSpawnRole(10001, 1, 1, 0, 2, new List<int> { 10011, 10012 });
+        this.DebugSpawnRole(10001, 2, 1, 5, 5, new List<int> { 10013 });
+
         this.Finish();
+    }
+
+    private void DebugSpawnRole(int characterId, int teamId, int level, int row, int col, List<int> equips)
+    {
+        ulong gid = BoardMapCtrl.Instance.SpawnRole(this.RoleObject, teamId, characterId, level, row, col);
+        Role role = RoleSystem.Instance.GetRoleByGid(gid);
+        foreach(var equipId in equips)
+        {
+            role.AddEquip(equipId);
+        }
     }
 }

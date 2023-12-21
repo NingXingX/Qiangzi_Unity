@@ -12,7 +12,7 @@ public class PlayerDecisionAction : FsmStateAction
     {
         Debug.Log("EnterPlayerDecision");
         BoardMapCtrl.Instance.ChooseTargetChange = SetRoleMovePlan;
-
+        MovePlanManager.Instance.EnterNewMoveState();
     }
 
     public override void OnExit()
@@ -40,8 +40,7 @@ public class PlayerDecisionAction : FsmStateAction
         {
             return;
         }
-        var role = BoardMapCtrl.Instance.GetRoleCompByGid(roleGid);
-        MovePlanManager.Instance.AddMovePlan(roleGid, role.TeamId, nxt.Row_Id, nxt.Col_Id);
+        MovePlanManager.Instance.AddMovePlan(roleGid, nxt.Row_Id, nxt.Col_Id);
         BoardMapCtrl.Instance.ChooseTarget = null;
     }
 }
