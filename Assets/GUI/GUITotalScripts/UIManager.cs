@@ -16,6 +16,9 @@ public class UIManager : MonoBehaviour
     //角色背包装备信息面板
     public static bool isBagEquipInfoPanelActive = false;
 
+    //装备栏展示面板
+    public static bool isEquipmentBarActive = false;
+
     //角色相关的变量
     [Header("角色相关变量")]
     public static int nowCharacterNumberInUI = 0;
