@@ -31,12 +31,17 @@ public class ChaStatsPrefab : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         UpdateStatsInfo(CharacterID);
+
     }
 
     //更新角色状态栏信息
     public void UpdateStatsInfo(int ID)
     {
+      
+        
+
         //得到Character表数据
         var chaData = CharacterDataLoader.Instance;
         CharacterData characterData = chaData.GetData(ID);

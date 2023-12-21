@@ -78,8 +78,23 @@ public class UIEvents : MonoBehaviour
     //找到并关闭角色装备栏面板
     public void HideChaEquipPanel()
     {
-        chaEquipPanel.SetActive(false);
-        isEquipPanelActive = false;
+        //当装备栏面板可见时，要让他不可见
+        if (UIManager.isEquipmentBarActive == true)
+        {
+            //得到装备栏面板上的CanvasGroup组件
+            GameObject equipBarPanel = GameObject.Find("ChaEquipmentBarPanel");
+            CanvasGroup canvasGroup = equipBarPanel.GetComponent<CanvasGroup>();
+
+            // 设置透明度为0
+            canvasGroup.alpha = 0f;
+
+            // 禁用交互性
+            canvasGroup.interactable = false;
+            canvasGroup.blocksRaycasts = false;
+
+            //改变变量
+            UIManager.isEquipmentBarActive = false;
+        }
     }
 
     //找到并展示角色装备栏面板
@@ -89,7 +104,7 @@ public class UIEvents : MonoBehaviour
         if (UIManager.isEquipmentBarActive == false)
         {
             //得到装备栏面板上的CanvasGroup组件
-            GameObject equipBarPanel = GameObject.Find("背包装备信息面板");
+            GameObject equipBarPanel = GameObject.Find("ChaEquipmentBarPanel");
             CanvasGroup canvasGroup = equipBarPanel.GetComponent<CanvasGroup>();
 
             // 设置透明度为0
@@ -100,7 +115,7 @@ public class UIEvents : MonoBehaviour
             canvasGroup.blocksRaycasts = true;
 
             //改变变量
-            UIManager.isBagEquipInfoPanelActive = true;
+            UIManager.isEquipmentBarActive = true;
         }
     }
 
