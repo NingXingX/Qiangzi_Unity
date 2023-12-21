@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   welcomeScreenVersion: '1.9.7 '
   playmakerVersion: 
-  showWelcomeScreen: 1
+  showWelcomeScreen: 0
   showUpgradeGuide: 0
-  lastAutoUpdateSignature: 2021.3.18f1c1__F:/QiangZi_Project(Unity)/Qiangzi_Unity/Assets__0.0.0.0
+  lastAutoUpdateSignature: 2021.3.18f1c1__D:/UNITY/Project/Qiangzi_Unity/Assets__0.0.0.0
   useLegacyNetworking: 0

@@ -21,6 +21,8 @@ public class ChaStatsPrefab : MonoBehaviour
     [Header("变量")]
     public int prefabNumerInUI;
 
+    private Role cachedRole;
+
 
 
     void Start()
@@ -32,19 +34,23 @@ public class ChaStatsPrefab : MonoBehaviour
     void Update()
     {
         
-        UpdateStatsInfo(CharacterID);
+        UpdateStatsInfo(this.cachedRole);
 
     }
 
     //更新角色状态栏信息
-    public void UpdateStatsInfo(int ID)
+    public void UpdateStatsInfo(Role role)
     {
-      
-        
+
+        this.cachedRole = role;
+        if (this.cachedRole == null)
+        {
+            return;
+        }
 
         //得到Character表数据
-        var chaData = CharacterDataLoader.Instance;
-        CharacterData characterData = chaData.GetData(ID);
+        //var chaData = CharacterDataLoader.Instance;
+        //CharacterData characterData = chaData.GetData(ID);
    
 
         //改变角色称号文本
@@ -53,7 +59,7 @@ public class ChaStatsPrefab : MonoBehaviour
         {
             //得到Content_text表数据
             var content_textData = Content_textDataLoader.Instance;
-            Content_textData content_TextData = content_textData.GetData(characterData.CharTitle);
+            Content_textData content_TextData = content_textData.GetData(role.CharTitle);
 
             titletext = titleText.GetComponent<Text>();
             titletext.text = content_TextData.ChineseTranslate;
@@ -65,21 +71,16 @@ public class ChaStatsPrefab : MonoBehaviour
         {
             //得到Content_text表数据
             var content_textData = Content_textDataLoader.Instance;
-            Content_textData content_TextData = content_textData.GetData(characterData.CharName);
+            Content_textData content_TextData = content_textData.GetData(role.CharName);
 
             chaNametext = chanameText.GetComponent<Text>();
             chaNametext.text = content_TextData.ChineseTranslate;
         }
 
         //改变角色护盾条和血量条
-        Read_Shield_And_HpSlider(CharacterLevel, CharacterID);
-        
-    }
-
-    private void Read_Shield_And_HpSlider(int Level,int GroupID)
-    {
+        //Read_Shield_And_HpSlider();
         //得到角色GroupID
-        int ID = Level + GroupID * 100;
+        //int ID = Level + GroupID * 100;
 
         //改变角色护盾条
         Transform shieldslider = transform.Find("角色护盾条");
@@ -87,27 +88,60 @@ public class ChaStatsPrefab : MonoBehaviour
         {
             //得到Character_attribute角色属性表数据
             var character_AttributeData = Character_attributeDataLoader.Instance;
-            Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
+            //Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
             shieldSlider = shieldslider.GetComponent<Slider>();
-            float result = CharacterManager.nowChaShieldValue * 1.0f / cha_attributeData.Shields;
+            float result = CharacterManager.nowChaShieldValue * 1.0f / role.Shields;
             shieldSlider.value = result;
             //print(shieldSlider.value);
         }
 
         //改变角色血量条
         Transform hpslider = transform.Find("角色血条");
-        if(hpslider != null)
+        if (hpslider != null)
         {
             //得到Character_attribute角色属性表数据
             var character_AttributeData = Character_attributeDataLoader.Instance;
-            Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
+            //Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
             hpSlider = hpslider.GetComponent<Slider>();
-            float result = CharacterManager.nowChaHpValue * 1.0f / cha_attributeData.Hp;
+            float result = CharacterManager.nowChaHpValue * 1.0f / role.Hp;
             shieldSlider.value = result;
             hpSlider.value = result;
             //print(hpSlider.value);
         }
     }
+
+    //private void Read_Shield_And_HpSlider()
+    //{
+    //    //得到角色GroupID
+    //    //int ID = Level + GroupID * 100;
+
+    //    //改变角色护盾条
+    //    Transform shieldslider = transform.Find("角色护盾条");
+    //    if (shieldslider != null)
+    //    {
+    //        //得到Character_attribute角色属性表数据
+    //        var character_AttributeData = Character_attributeDataLoader.Instance;
+    //        //Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
+    //        shieldSlider = shieldslider.GetComponent<Slider>();
+    //        float result = CharacterManager.nowChaShieldValue * 1.0f / role.Shields;
+    //        shieldSlider.value = result;
+    //        //print(shieldSlider.value);
+    //    }
+
+    //    //改变角色血量条
+    //    Transform hpslider = transform.Find("角色血条");
+    //    if(hpslider != null)
+    //    {
+    //        //得到Character_attribute角色属性表数据
+    //        var character_AttributeData = Character_attributeDataLoader.Instance;
+    //        Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
+    //        hpSlider = hpslider.GetComponent<Slider>();
+    //        float result = CharacterManager.nowChaHpValue * 1.0f / cha_attributeData.Hp;
+    //        shieldSlider.value = result;
+    //        hpSlider.value = result;
+    //        //print(hpSlider.value);
+    //    }
+    //}
 
     public void ChangeNowCharacterID()
     {

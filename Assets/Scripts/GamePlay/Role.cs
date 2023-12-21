@@ -18,6 +18,8 @@ public class Role
     public int RowPos;
     public int ColPos;
     public List<RoleEquip> EquipList;
+    public string CharTitle;
+    public string CharName;
 
     public RoleComp OwnComp;
 
@@ -48,6 +50,8 @@ public class Role
         this.Shields = this.attribute.Shields;
         this.ActionNum = this.attribute.ActionNum;
         this.EquipList = new List<RoleEquip>();
+        this.CharTitle = this.character.CharTitle;
+        this.CharName = this.character.CharName;
 
         this.OwnComp = null;
     }
