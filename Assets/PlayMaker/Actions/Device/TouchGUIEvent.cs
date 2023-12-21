@@ -1,21 +1,27 @@
-﻿// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+﻿// (c) Copyright HutongGames, LLC. All rights reserved.
 
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace HutongGames.PlayMaker.Actions
 {
 	[ActionCategory(ActionCategory.Device)]
 	[Tooltip("Sends events when a GUI Texture or GUI Text is touched. Optionally filter by a fingerID.")]
-	#if UNITY_2017_2_OR_NEWER
-	#pragma warning disable CS0618  
+
+    #if UNITY_2019_3_OR_NEWER
+    [Obsolete("GUIElement is part of the legacy UI system removed in 2019.3")]
+    #elif UNITY_2017_2_OR_NEWER
+	#pragma warning disable 618  
 	[Obsolete("GUIElement is part of the legacy UI system and will be removed in a future release")]
 	#endif
 	public class TouchGUIEvent : FsmStateAction
 	{
 		[RequiredField]
+#if !UNITY_2019_3_OR_NEWER
 		[CheckForComponent(typeof(GUIElement))]
+#else
+        [ActionSection("Obsolete. Use Unity UI instead.")]
+#endif
 		[Tooltip("The Game Object that owns the GUI Texture or GUI Text.")]
 		public FsmOwnerDefault gameObject;
 
@@ -80,7 +86,10 @@ namespace HutongGames.PlayMaker.Actions
 		// private work variables
 
 		private Vector3 touchStartPos;
+
+#if !UNITY_2019_3_OR_NEWER
 		private GUIElement guiElement;
+#endif
 
 		public override void Reset()
 		{
@@ -105,14 +114,19 @@ namespace HutongGames.PlayMaker.Actions
 
 		public override void  OnEnter()
 		{
+#if !UNITY_2019_3_OR_NEWER
 			DoTouchGUIEvent();
 
-			if (!everyFrame)
+            if (!everyFrame)
 			{
 				Finish();
 			}
+#else
+            Finish();
+#endif
 		}
 
+#if !UNITY_2019_3_OR_NEWER
 		public override void  OnUpdate()
 		{
  			 DoTouchGUIEvent();
@@ -128,7 +142,7 @@ namespace HutongGames.PlayMaker.Actions
 					return;
 				}
 
-				//guiElement = go.GetComponent<GUITexture>() ?? (GUIElement) go.GetComponent<Text>();
+				guiElement = go.GetComponent<GUITexture>() ?? (GUIElement) go.GetComponent<GUIText>();
 
 				if (guiElement == null)
 				{
@@ -252,5 +266,7 @@ namespace HutongGames.PlayMaker.Actions
 
 			storeOffset.Value = offset;
 		}
+
+#endif
 	}
 }

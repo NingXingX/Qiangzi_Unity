@@ -10,7 +10,7 @@ namespace HutongGames.PlayMaker.Actions
 	public class GetFsmEnum : FsmStateAction
 	{
 		[RequiredField]
-        [Tooltip("The target FSM")]
+        [Tooltip("The GameObject that owns the FSM.")]
 		public FsmOwnerDefault gameObject;
 		
         [UIHint(UIHint.FsmName)]
@@ -18,18 +18,21 @@ namespace HutongGames.PlayMaker.Actions
 		public FsmString fsmName;
 		
         [RequiredField]
-		[UIHint(UIHint.FsmBool)]
-		public FsmString variableName;
+		[UIHint(UIHint.FsmEnum)]
+        [Tooltip("The name of the FSM variable to get.")]
+        public FsmString variableName;
 		
         [RequiredField]
 		[UIHint(UIHint.Variable)]
-		public FsmEnum storeValue;
+        [Tooltip("Store the value in an Enum variable in this FSM.")]
+        public FsmEnum storeValue;
 		
-        [Tooltip("Repeat every frame")]
+        [Tooltip("Repeat every frame. Useful if the value is changing.")]
         public bool everyFrame;
 
-		GameObject goLastFrame;
-		PlayMakerFSM fsm;
+        private GameObject goLastFrame;
+        private string fsmNameLastFrame;
+        private PlayMakerFSM fsm;
 		
 		public override void Reset()
 		{
@@ -53,18 +56,18 @@ namespace HutongGames.PlayMaker.Actions
 			DoGetFsmEnum();
 		}
 
-		void DoGetFsmEnum()
+        private void DoGetFsmEnum()
 		{
 			if (storeValue == null) return;
 
 			GameObject go = Fsm.GetOwnerDefaultTarget(gameObject);
 			if (go == null) return;
 			
-			// only get the fsm component if go has changed
-
-			if (go != goLastFrame)
-			{
-				goLastFrame = go;
+            if (go != goLastFrame || fsmName.Value != fsmNameLastFrame)
+            {
+                goLastFrame = go;
+                fsmNameLastFrame = fsmName.Value;
+                // only get the fsm component if go or fsm name has changed
 				fsm = ActionHelpers.GetGameObjectFsm(go, fsmName.Value);
 			}			
 			
@@ -76,5 +79,13 @@ namespace HutongGames.PlayMaker.Actions
 			storeValue.Value = fsmEnum.Value;
 		}
 
-	}
+#if UNITY_EDITOR
+
+        public override string AutoName()
+        {
+            return ActionHelpers.AutoName(this, variableName);
+        }
+
+#endif
+    }
 }

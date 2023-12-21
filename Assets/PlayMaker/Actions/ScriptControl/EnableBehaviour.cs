@@ -5,7 +5,7 @@ using UnityEngine;
 namespace HutongGames.PlayMaker.Actions
 {
 	[ActionCategory(ActionCategory.ScriptControl)]
-	[Tooltip("Enables/Disables a Behaviour on a GameObject. Optionally reset the Behaviour on exit - useful if you want the Behaviour to be active only while this state is active.")]
+	[Tooltip("Enables/Disables a Behaviour on a GameObject. Optionally reset the Behaviour on exiting the state. E.g., if you want the Behaviour to be active only while this state is active.")]
 	public class EnableBehaviour : FsmStateAction
 	{
 		[RequiredField]
@@ -23,6 +23,7 @@ namespace HutongGames.PlayMaker.Actions
         [Tooltip("Set to True to enable, False to disable.")]
 		public FsmBool enable;
 		
+        [Tooltip("Reset the enabled state of the Behaviour when leaving this state.")]
 		public FsmBool resetOnExit;
 
 		public override void Reset()

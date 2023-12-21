@@ -1,4 +1,4 @@
-// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+// (c) Copyright HutongGames. All rights reserved.
 
 using UnityEngine;
 
@@ -15,11 +15,17 @@ namespace HutongGames.PlayMaker.Actions
 		public FsmVector3 position;
 
 		[CompoundArray("Audio Clips", "Audio Clip", "Weight")]
-		public AudioClip[] audioClips;
+		[ObjectType(typeof(AudioClip))]
+        [Tooltip("A possible Audio Clip choice.")]
+        public FsmObject[] audioClips;
 		[HasFloatSlider(0, 1)]
-		public FsmFloat[] weights;
+        [Tooltip("The relative probability of this sound being picked. " +
+                 "E.g. a weight of 0.5 is half as likely to be picked as a weight of 1.")]
+        public FsmFloat[] weights;
+
 		[HasFloatSlider(0, 1)]
-		public FsmFloat volume = 1f;
+        [Tooltip("Volume to play the sound at.")]
+        public FsmFloat volume = 1f;
 
         [Tooltip("Don't play the same sound twice in a row")]
         public FsmBool noRepeat;
@@ -31,7 +37,7 @@ namespace HutongGames.PlayMaker.Actions
 		{
 			gameObject = null;
 			position = new FsmVector3 { UseVariable = true };
-			audioClips = new AudioClip[3];
+			audioClips = new FsmObject[3];
 			weights = new FsmFloat[] {1,1,1};
 			volume = 1;
             noRepeat = false;
@@ -64,7 +70,7 @@ namespace HutongGames.PlayMaker.Actions
 
             if (randomIndex != -1)
 			{
-				AudioClip clip = audioClips[randomIndex];
+				var clip = audioClips[randomIndex].Value as AudioClip;
 				if (clip != null)
 				{
 					if (!position.IsNone)

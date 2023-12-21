@@ -10,20 +10,29 @@ namespace HutongGames.PlayMaker.Actions
 	public class GetFsmFloat : FsmStateAction
 	{
 		[RequiredField]
-		public FsmOwnerDefault gameObject;
-		[UIHint(UIHint.FsmName)]
+        [Tooltip("The GameObject that owns the FSM.")]
+        public FsmOwnerDefault gameObject;
+		
+        [UIHint(UIHint.FsmName)]
 		[Tooltip("Optional name of FSM on Game Object")]
 		public FsmString fsmName;
-		[RequiredField]
-		[UIHint(UIHint.FsmFloat)]
-		public FsmString variableName;
-		[RequiredField]
-		[UIHint(UIHint.Variable)]
-		public FsmFloat storeValue;
-		public bool everyFrame;
 		
-		GameObject goLastFrame;
-		PlayMakerFSM fsm;
+        [RequiredField]
+		[UIHint(UIHint.FsmFloat)]
+        [Tooltip("The name of the FSM variable to get.")]
+        public FsmString variableName;
+		
+        [RequiredField]
+		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the value in a Float variable in this FSM.")]
+		public FsmFloat storeValue;
+		
+        [Tooltip("Repeat every frame. Useful if the value is changing.")]
+        public bool everyFrame;
+
+        private GameObject goLastFrame;
+        private string fsmNameLastFrame;
+        private PlayMakerFSM fsm;
 		
 		public override void Reset()
 		{
@@ -45,19 +54,19 @@ namespace HutongGames.PlayMaker.Actions
 			DoGetFsmFloat();
 		}
 
-		void DoGetFsmFloat()
+        private void DoGetFsmFloat()
 		{
 			if (storeValue.IsNone) return;
 
 			GameObject go = Fsm.GetOwnerDefaultTarget(gameObject);
 			if (go == null) return;
 
-			// only get the fsm component if go has changed
-	
-			if (go != goLastFrame)
-			{
+            if (go != goLastFrame || fsmName.Value != fsmNameLastFrame)
+            {
+                goLastFrame = go;
+                fsmNameLastFrame = fsmName.Value;
+                // only get the fsm component if go or fsm name has changed
 				fsm = ActionHelpers.GetGameObjectFsm(go, fsmName.Value);
-				goLastFrame = go;
 			}
 			
 			if (fsm == null) return;
@@ -69,5 +78,13 @@ namespace HutongGames.PlayMaker.Actions
 			storeValue.Value = fsmFloat.Value;
 		}
 
-	}
+#if UNITY_EDITOR
+
+        public override string AutoName()
+        {
+            return ActionHelpers.AutoName(this, variableName);
+        }
+
+#endif
+    }
 }

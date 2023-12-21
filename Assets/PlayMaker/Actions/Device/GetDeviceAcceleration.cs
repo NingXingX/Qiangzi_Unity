@@ -1,6 +1,4 @@
-// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
-
-using UnityEngine;
+// (c) Copyright HutongGames, LLC 2010-2021. All rights reserved.
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -20,14 +18,25 @@ namespace HutongGames.PlayMaker.Actions
 */
 
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the acceleration in a Vector3 Variable.")]
 		public FsmVector3 storeVector;
-		[UIHint(UIHint.Variable)]
+
+        [UIHint(UIHint.Variable)]
+        [Tooltip("Store the x component of the acceleration in a Float Variable.")]
 		public FsmFloat storeX;
-		[UIHint(UIHint.Variable)]
+
+        [UIHint(UIHint.Variable)]
+        [Tooltip("Store the y component of the acceleration in a Float Variable.")]
 		public FsmFloat storeY;
-		[UIHint(UIHint.Variable)]
+
+        [UIHint(UIHint.Variable)]
+        [Tooltip("Store the z component of the acceleration in a Float Variable.")]
 		public FsmFloat storeZ;
+
+        [Tooltip("Multiply the acceleration by a float value.")]
 		public FsmFloat multiplier;
+
+        [Tooltip("Repeat every frame.")]
 		public bool everyFrame;
 		
 		public override void Reset()
@@ -43,9 +52,11 @@ namespace HutongGames.PlayMaker.Actions
 		public override void OnEnter()
 		{
 			DoGetDeviceAcceleration();
-			
-			if (!everyFrame)
-				Finish();
+
+            if (!everyFrame)
+            {
+                Finish();
+            }
 		}
 		
 
@@ -56,28 +67,29 @@ namespace HutongGames.PlayMaker.Actions
 		
 		void DoGetDeviceAcceleration()
 		{
-/*			var dir = Vector3.zero;
-			
-			switch (mappingOptions) 
-			{
-			case MappingOptions.Flat:
-				
-				dir.x = Input.acceleration.x;
-				dir.y = Input.acceleration.z;
-				dir.z = Input.acceleration.y;
-				break;
-					
-				
-			case MappingOptions.Vertical:
-				dir.x = Input.acceleration.x;
-				dir.y = Input.acceleration.y;
-				dir.z = Input.acceleration.x;
-				break;
-			}
-*/
-			var dir = new Vector3(Input.acceleration.x, Input.acceleration.y, Input.acceleration.z);
-			
-			if (!multiplier.IsNone)
+            /*			var dir = Vector3.zero;
+
+                        switch (mappingOptions) 
+                        {
+                        case MappingOptions.Flat:
+
+                            dir.x = Input.acceleration.x;
+                            dir.y = Input.acceleration.z;
+                            dir.z = Input.acceleration.y;
+                            break;
+
+
+                        case MappingOptions.Vertical:
+                            dir.x = Input.acceleration.x;
+                            dir.y = Input.acceleration.y;
+                            dir.z = Input.acceleration.x;
+                            break;
+                        }
+            */
+
+            var dir = ActionHelpers.GetDeviceAcceleration();
+
+            if (!multiplier.IsNone)
 			{
 				dir *= multiplier.Value;
 			}

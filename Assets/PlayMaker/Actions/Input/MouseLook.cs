@@ -1,6 +1,19 @@
-﻿// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+﻿// (c) Copyright HutongGames, LLC 2010-2021. All rights reserved.
+
+// NOTE: The new Input System and legacy Input Manager can both be enabled in a project.
+// This action was developed for the old input manager, so we will use it if its available. 
+// If only the new input system is available we will try to use that instead,
+// but there might be subtle differences in the behaviour in the new system!
+
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#define NEW_INPUT_SYSTEM_ONLY
+#endif
 
 using UnityEngine;
+
+#if NEW_INPUT_SYSTEM_ONLY
+using UnityEngine.InputSystem;
+#endif
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -10,7 +23,7 @@ namespace HutongGames.PlayMaker.Actions
 	/// </summary>
 	[ActionCategory(ActionCategory.Input)]
 	[Tooltip("Rotates a GameObject based on mouse movement. Minimum and Maximum values can be used to constrain the rotation.")]
-	public class MouseLook : FsmStateAction
+	public class MouseLook : ComponentAction<Transform>
 	{
 		public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
 
@@ -48,10 +61,10 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("Repeat every frame.")]
 		public bool everyFrame;
 
-		float rotationX;
-		float rotationY;
+        private float rotationX;
+        private float rotationY;
 
-		public override void Reset()
+        public override void Reset()
 		{
 			gameObject = null;
 			axes = RotationAxes.MouseXAndY;
@@ -66,16 +79,15 @@ namespace HutongGames.PlayMaker.Actions
 
 		public override void OnEnter()
 		{
-			var go = Fsm.GetOwnerDefaultTarget(gameObject);
-			if (go == null)
-			{
+            if (!UpdateCachedTransform(Fsm.GetOwnerDefaultTarget(gameObject)))
+            {
 				Finish();
 				return;
 			}
 
 			// Make the rigid body not change rotation
 			// TODO: Original Unity script had this. Expose as option?
-		    var rigidbody = go.GetComponent<Rigidbody>();
+		    var rigidbody = cachedGameObject.GetComponent<Rigidbody>();
             if (rigidbody != null)
 			{
 				rigidbody.freezeRotation = true;
@@ -83,79 +95,84 @@ namespace HutongGames.PlayMaker.Actions
 
             // initialize rotation
 
-		    rotationX = go.transform.localRotation.eulerAngles.y;
-            rotationY = go.transform.localRotation.eulerAngles.x;
+            rotationX = cachedTransform.localRotation.eulerAngles.y;
+            rotationY = cachedTransform.localRotation.eulerAngles.x;
 
-			DoMouseLook();
-
-			if (!everyFrame)
+            if (!everyFrame)
 			{
-				Finish();
+                DoMouseLook();
+                Finish();
 			}
-		}
+        }
 
 		public override void OnUpdate()
 		{
 			DoMouseLook();
 		}
 
-		void DoMouseLook()
+        private void DoMouseLook()
 		{
-			var go = Fsm.GetOwnerDefaultTarget(gameObject);
-			if (go == null)
-			{
-				return;
-			}
+            if (!UpdateCachedTransform(Fsm.GetOwnerDefaultTarget(gameObject)))
+            {
+                Finish();
+                return;
+            }
 
-			var transform = go.transform;
-
-			switch (axes)
+            switch (axes)
 			{
 				case RotationAxes.MouseXAndY:
 					
-					transform.localEulerAngles = new Vector3(GetYRotation(), GetXRotation(), 0);
+					cachedTransform.localEulerAngles = new Vector3(GetYRotation(), GetXRotation(), 0);
 					break;
 				
 				case RotationAxes.MouseX:
 
-					transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, GetXRotation(), 0);
+                    cachedTransform.localEulerAngles = new Vector3(cachedTransform.localEulerAngles.x, GetXRotation(), 0);
 					break;
 
 				case RotationAxes.MouseY:
 
-					transform.localEulerAngles = new Vector3(-GetYRotation(), transform.localEulerAngles.y, 0);
+                    cachedTransform.localEulerAngles = new Vector3(GetYRotation(-1), cachedTransform.localEulerAngles.y, 0);
 					break;
 			}
-		}
+        }
 
-		float GetXRotation()
+        private float GetXRotation()
 		{
-			rotationX += Input.GetAxis("Mouse X") * sensitivityX.Value;
-			rotationX = ClampAngle(rotationX, minimumX, maximumX);
+#if NEW_INPUT_SYSTEM_ONLY
+            if (Mouse.current == null) return rotationX;
+			// fudge factor accounts for sensitivity of old input system
+            rotationX += Mouse.current.delta.ReadValue().x * sensitivityY.Value * 0.05f; 
+#else
+            rotationX += Input.GetAxis("Mouse X") * sensitivityX.Value;
+#endif
+            rotationX = ClampAngle(rotationX, minimumX, maximumX) % 360;
 			return rotationX;
 		}
 
-		float GetYRotation()
+        private float GetYRotation(float invert = 1)
 		{
-			rotationY += Input.GetAxis("Mouse Y") * sensitivityY.Value;
-			rotationY = ClampAngle(rotationY, minimumY, maximumY);
+#if NEW_INPUT_SYSTEM_ONLY
+            if (Mouse.current == null) return rotationY;
+            // fudge factor accounts for sensitivity of old input system
+            rotationY += Mouse.current.delta.ReadValue().y * sensitivityY.Value * invert * -0.05f; 
+#else
+            rotationY += Input.GetAxis("Mouse Y") * sensitivityY.Value * invert;
+#endif
+			rotationY = ClampAngle(rotationY, minimumY, maximumY) % 360;
 			return rotationY;
 		}
 
-		// Clamp function that respects IsNone
-		static float ClampAngle(float angle, FsmFloat min, FsmFloat max)
+		// Clamp function that respects IsNone and 360 wrapping
+        private static float ClampAngle(float angle, FsmFloat min, FsmFloat max)
 		{
-			if (!min.IsNone && angle < min.Value)
-			{
-				angle = min.Value;
-			}
+            if (angle < 0f) angle = 360 + angle;
 
-			if (!max.IsNone && angle > max.Value)
-			{
-				angle = max.Value;
-			}
-			
-			return angle;
+            var from = min.IsNone ? -720 : min.Value;
+            var to = max.IsNone ? 720 : max.Value;
+
+            if (angle > 180f) return Mathf.Max(angle, 360 + from);
+            return Mathf.Min(angle, to);
 		}
 	}
 }

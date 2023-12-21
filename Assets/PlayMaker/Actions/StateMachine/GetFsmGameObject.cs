@@ -10,20 +10,29 @@ namespace HutongGames.PlayMaker.Actions
 	public class GetFsmGameObject : FsmStateAction
 	{
 		[RequiredField]
-		public FsmOwnerDefault gameObject;
-		[UIHint(UIHint.FsmName)]
+        [Tooltip("The GameObject that owns the FSM.")]
+        public FsmOwnerDefault gameObject;
+		
+        [UIHint(UIHint.FsmName)]
 		[Tooltip("Optional name of FSM on Game Object")]
 		public FsmString fsmName;
-		[RequiredField]
-		[UIHint(UIHint.FsmGameObject)]
-		public FsmString variableName;
-		[RequiredField]
-		[UIHint(UIHint.Variable)]
-		public FsmGameObject storeValue;
-		public bool everyFrame;
 		
-		GameObject goLastFrame;
-		PlayMakerFSM fsm;
+        [RequiredField]
+		[UIHint(UIHint.FsmGameObject)]
+        [Tooltip("The name of the FSM variable to get.")]
+        public FsmString variableName;
+		
+        [RequiredField]
+		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the value in a GameObject variable in this FSM.")]
+		public FsmGameObject storeValue;
+		
+        [Tooltip("Repeat every frame. Useful if the value is changing.")]
+        public bool everyFrame;
+
+        private GameObject goLastFrame;
+        private string fsmNameLastFrame;
+        private PlayMakerFSM fsm;
 		
 		public override void Reset()
 		{
@@ -45,18 +54,18 @@ namespace HutongGames.PlayMaker.Actions
 			DoGetFsmGameObject();
 		}
 
-		void DoGetFsmGameObject()
+        private void DoGetFsmGameObject()
 		{
 			if (storeValue == null) return;
 
 			GameObject go = Fsm.GetOwnerDefaultTarget(gameObject);
 			if (go == null) return;
 
-			// only get the fsm component if go has changed
-			
-			if (go != goLastFrame)
-			{
-				goLastFrame = go;
+            if (go != goLastFrame || fsmName.Value != fsmNameLastFrame)
+            {
+                goLastFrame = go;
+                fsmNameLastFrame = fsmName.Value;
+                // only get the fsm component if go or fsm name has changed
 				fsm = ActionHelpers.GetGameObjectFsm(go, fsmName.Value);
 			}
 			
@@ -69,7 +78,14 @@ namespace HutongGames.PlayMaker.Actions
 			storeValue.Value = fsmGameObject.Value;
 		}
 
+#if UNITY_EDITOR
 
+        public override string AutoName()
+        {
+            return ActionHelpers.AutoName(this, variableName);
+        }
 
-	}
+#endif
+
+    }
 }

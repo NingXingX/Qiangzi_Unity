@@ -1,24 +1,42 @@
-// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+// (c) Copyright HutongGames, LLC 2010-2021. All rights reserved.
 
+// The new Input System optionally supports the legacy input manager 
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#define NEW_INPUT_SYSTEM_ONLY
+#endif
+
+using System;
+
+#if !NEW_INPUT_SYSTEM_ONLY
 using UnityEngine;
+#endif
 
 namespace HutongGames.PlayMaker.Actions
-{	
-	[ActionCategory(ActionCategory.Device)]
+{
+#if NEW_INPUT_SYSTEM_ONLY
+    [Obsolete("This action has no equivalent in the new Input System.")]
+#endif
+    [ActionCategory(ActionCategory.Device)]
 	[Tooltip("Gets Location Info from a mobile device. NOTE: Use StartLocationService before trying to get location info.")]
 	public class GetLocationInfo : FsmStateAction
 	{
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the location in a Vector3 Variable.")]
 		public FsmVector3 vectorPosition;		
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the Longitude in a Float Variable.")]
 		public FsmFloat longitude;
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the Latitude in a Float Variable.")]
 		public FsmFloat latitude;
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the Altitude in a Float Variable.")]
 		public FsmFloat altitude;
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the horizontal accuracy of the location.")]
 		public FsmFloat horizontalAccuracy;
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the vertical accuracy of the location.")]
 		public FsmFloat verticalAccuracy;
 		// TODO: figure out useful way to expose timeStamp
 		// maybe how old is the location...?
@@ -46,8 +64,9 @@ namespace HutongGames.PlayMaker.Actions
 			Finish();
 		}
 
-		void DoGetLocationInfo()
+        private void DoGetLocationInfo()
         {
+#if !NEW_INPUT_SYSTEM_ONLY
 #if UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID || UNITY_BLACKBERRY || UNITY_WP8
 
 			if (Input.location.status != LocationServiceStatus.Running)
@@ -70,6 +89,16 @@ namespace HutongGames.PlayMaker.Actions
 			verticalAccuracy.Value = Input.location.lastData.verticalAccuracy;
 			
 #endif
+#endif
         }
-	}
+
+#if NEW_INPUT_SYSTEM_ONLY
+
+        public override string ErrorCheck()
+        {
+            return "This action is not supported in the new Input System.";
+        }
+#endif
+
+    }
 }

@@ -4,19 +4,32 @@
 #define UNITY_PRE_5_3
 #endif
 
+// NOTE: The new Input System and legacy Input Manager can both be enabled in a project.
+// Most actions were developed for the old input manager, so we will use it if its available. 
+// If only the new input system is available we will try to use that instead,
+// but there might be subtle differences in the behaviour in the new system!
+// We will add new helpers for the new Input System.
+
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#define NEW_INPUT_SYSTEM_ONLY
+#endif
+
+
 #define FSM_LOG
 
 #if !PLAYMAKER_NO_UI
-
 using UnityEngine.UI;
-
 #endif
 
 using System;
 using System.Collections.Generic;
-using HutongGames.PlayMaker.Actions;
+//using System.Text.RegularExpressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 #if UNITY_EDITOR
 
@@ -70,12 +83,25 @@ namespace HutongGames.PlayMaker
         /// </summary>
         public static bool IsVisible(GameObject go)
         {
-            if (go == null)
-            {
-                return false;
-            }
+            if (go == null) return false;
             var renderer = go.GetComponent<Renderer>();
             return renderer != null && renderer.isVisible;
+        }
+
+        /// <summary>
+        /// Check the visibility of a GameObject's bounds to a specific camera
+        /// </summary>
+        public static bool IsVisible(GameObject go, Camera camera, bool useBounds)
+        {
+            if (go == null || camera == false) return false;
+            var renderer = go.GetComponent<Renderer>();
+            if (renderer == null) return false;
+
+            if (useBounds)
+                return GeometryUtility.TestPlanesAABB(GeometryUtility.CalculateFrustumPlanes(camera), renderer.bounds);
+
+            var screenPoint = camera.WorldToViewportPoint(go.transform.position);
+            return screenPoint.z > 0 && screenPoint.x > 0 && screenPoint.x < 1 && screenPoint.y > 0 && screenPoint.y < 1;
         }
 
         /// <summary>
@@ -99,14 +125,14 @@ namespace HutongGames.PlayMaker
                 {
                     if (fsmComponent.FsmName == fsmName)
                     {
-                        return (fsmComponent);
+                        return fsmComponent;
                     }
                 }
 
-                Debug.LogWarning("Could not find FSM: " + fsmName);
+                Debug.LogWarning("Could not find FSM: " + fsmName + " on GameObject: " + go.name);
             }
 
-            return (go.GetComponent<PlayMakerFSM>());
+            return go.GetComponent<PlayMakerFSM>();
         }
 
         /// <summary>
@@ -252,195 +278,42 @@ namespace HutongGames.PlayMaker
             return validPos;
         }*/
 
-        /// <summary>
-        /// Returns a target rotation in world space given the specified parameters
-        /// Some parameters are interpreted differently based on RotationOptions selected.
-        /// E.g. used by TweenRotation
-        /// </summary>
-        /// <param name="option">Rotation options exposed to user</param>
-        /// <param name="owner">The transform being rotated</param>
-        /// <param name="target">A potential target transform</param>
-        /// <param name="rotation">A potential target rotation</param>
-        /// <returns></returns>
-        public static Quaternion GetTargetRotation(RotationOptions option, Transform owner, Transform target, Vector3 rotation)
+        #region Input Helpers
+        
+        // Input System agnostic methods
+
+        public static Vector3 GetDeviceAcceleration()
         {
-            if (owner == null) return Quaternion.identity;
-
-            switch (option)
-            {
-                case RotationOptions.CurrentRotation:
-                    return owner.rotation;
-
-                case RotationOptions.WorldRotation:
-                    return Quaternion.Euler(rotation);
-
-                case RotationOptions.LocalRotation: 
-                    // same as world rotation if no parent
-                    if (owner.parent == null) return Quaternion.Euler(rotation);
-                    return owner.parent.rotation * Quaternion.Euler(rotation);
-
-                case RotationOptions.WorldOffsetRotation:
-                    // same as rotating with global in editor
-                    return Quaternion.Euler(rotation) * owner.rotation;
-
-                case RotationOptions.LocalOffsetRotation:
-                    return owner.rotation * Quaternion.Euler(rotation);
-
-                case RotationOptions.MatchGameObjectRotation:
-                    if (target == null) return owner.rotation;
-                    return target.rotation * Quaternion.Euler(rotation);
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            //return owner.rotation; // leave as is
+#if NEW_INPUT_SYSTEM_ONLY
+            return Accelerometer.current != null ? Accelerometer.current.acceleration.ReadValue() : Vector3.zero;
+#else
+            return Input.acceleration;
+#endif 
         }
 
-        public static bool GetTargetRotation(RotationOptions option, Transform owner, FsmVector3 rotation,
-            FsmGameObject target, out Quaternion targetRotation)
+        public static Vector3 GetMousePosition()
         {
-            targetRotation = Quaternion.identity;
-            if (owner == null || !CanEditTargetRotation(option, rotation, target)) return false;
-            targetRotation = GetTargetRotation(option, owner, 
-                target.Value != null ? target.Value.transform : null, 
-                rotation.Value);
-            return true;
+#if NEW_INPUT_SYSTEM_ONLY
+            if (Mouse.current == null) return Vector3.zero;
+            return Mouse.current.position.ReadValue();
+#else
+            return Input.mousePosition;
+#endif
         }
 
-        private static bool CanEditTargetRotation(RotationOptions option, NamedVariable rotation, FsmGameObject target)
+        public static bool AnyKeyDown()
         {
-            switch (option)
-            {
-                case RotationOptions.CurrentRotation:
-                    return false;
-                case RotationOptions.WorldRotation:
-                case RotationOptions.LocalRotation:
-                case RotationOptions.WorldOffsetRotation:
-                case RotationOptions.LocalOffsetRotation:
-                    return !rotation.IsNone;
-                    
-                case RotationOptions.MatchGameObjectRotation:
-                    return target.Value != null;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+#if NEW_INPUT_SYSTEM_ONLY
+            return Keyboard.current.anyKey.isPressed ||
+                   Mouse.current.leftButton.isPressed ||
+                   Mouse.current.rightButton.isPressed ||
+                   Mouse.current.middleButton.isPressed;
+#else
+            return Input.anyKeyDown;
+#endif
         }
 
-        public static Vector3 GetTargetScale(ScaleOptions option, Transform owner, Transform target, Vector3 scale)
-        {
-            if (owner == null) return Vector3.one;
-
-            switch (option)
-            {
-                case ScaleOptions.CurrentScale:
-                    return owner.localScale;
-
-                case ScaleOptions.LocalScale:
-                    return scale;
-
-                case ScaleOptions.MultiplyScale:
-                    return new Vector3(owner.localScale.x * scale.x, owner.localScale.y * scale.y, owner.localScale.z * scale.z);
-
-                case ScaleOptions.AddToScale:
-                    return new Vector3(owner.localScale.x + scale.x, owner.localScale.y + scale.y, owner.localScale.z + scale.z);
-
-                case ScaleOptions.MatchGameObject:
-                    if (target == null) return owner.localScale;
-                    return target.localScale;
-
-                /* Useful...?
-                case ScaleOptions.MatchGameObjectMultiply:
-                    if (target == null) return owner.localScale;
-                    if (scale == Vector3.one) return target.localScale;
-                    return new Vector3(target.localScale.x * scale.x, target.localScale.y * scale.y, target.localScale.z * scale.z);
-                */
-            }
-
-            return owner.localScale; // leave as is
-        }
-
-        public static bool GetTargetPosition(PositionOptions option, Transform owner, FsmVector3 position,
-            FsmGameObject target, out Vector3 targetPosition)
-        {
-            targetPosition = Vector3.zero;
-            if (owner == null || !IsValidTargetPosition(option, position, target)) return false;
-            targetPosition = GetTargetPosition(option, owner, (target != null && target.Value != null) ? target.Value.transform : null, position.Value);
-            return true;
-        }
-
-        private static bool IsValidTargetPosition(PositionOptions option, NamedVariable position, FsmGameObject target)
-        {
-            switch (option)
-            {
-                case PositionOptions.CurrentPosition:
-                    return true;
-                case PositionOptions.WorldPosition:
-                case PositionOptions.LocalPosition:
-                case PositionOptions.WorldOffset:
-                case PositionOptions.LocalOffset:
-                    return !position.IsNone;
-                    
-                case PositionOptions.TargetGameObject:
-                    return target.Value != null;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        public static bool CanEditTargetPosition(PositionOptions option, NamedVariable position, FsmGameObject target)
-        {
-            switch (option)
-            {
-                case PositionOptions.CurrentPosition:
-                    return false;
-                case PositionOptions.WorldPosition:
-                case PositionOptions.LocalPosition:
-                case PositionOptions.WorldOffset:
-                case PositionOptions.LocalOffset:
-                    return !position.IsNone;
-                    
-                case PositionOptions.TargetGameObject:
-                    return target.Value != null;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        public static Vector3 GetTargetPosition(PositionOptions option, Transform owner, Transform target, Vector3 position)
-        {
-            if (owner == null) return Vector3.zero;
-
-            switch (option)
-            {
-                case PositionOptions.CurrentPosition:
-                    return owner.position;
-                    
-                case PositionOptions.WorldPosition:
-                    return position;
-                    
-                case PositionOptions.LocalPosition:
-                    if (owner.parent == null) return position;
-                    return owner.parent.TransformPoint(position);
-                    
-                case PositionOptions.WorldOffset:
-                    return owner.position + position;
-
-                case PositionOptions.LocalOffset:
-                    return owner.TransformPoint(position);
-                    
-                case PositionOptions.TargetGameObject:
-                    if (target == null) return owner.position;
-                    if (position != Vector3.zero) return target.TransformPoint(position);
-                    return target.position;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        #endregion
 
         // Raycast helpers that cache values to minimize the number of raycasts
 
@@ -497,8 +370,12 @@ namespace HutongGames.PlayMaker
             {
                 return;
             }
-
+#if NEW_INPUT_SYSTEM_ONLY
+            if (Mouse.current == null) return;
+            var ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+#else
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+#endif
 
             Physics.Raycast(ray, out mousePickInfo, distance, layerMask);
 
@@ -507,7 +384,7 @@ namespace HutongGames.PlayMaker
             mousePickRaycastTime = Time.frameCount;
         }
 
-        #endregion
+#endregion
 
         public static int LayerArrayToLayerMask(FsmInt[] layers, bool invert)
         {
@@ -526,11 +403,11 @@ namespace HutongGames.PlayMaker
             // Unity 5.3 changed this Physics property name
             //public const int kDefaultRaycastLayers = -5;
             /*
-            #if UNITY_PRE_5_3
+#if UNITY_PRE_5_3
                         return layermask == 0 ? Physics.kDefaultRaycastLayers : layermask;
-            #else
+#else
                         return layermask == 0 ? Physics.DefaultRaycastLayers : layermask;
-            #endif
+#endif
             */
             // HACK just return the hardcoded value to avoid separate Unity 5.3 dll
             // TODO Revisit in future version
@@ -583,7 +460,7 @@ namespace HutongGames.PlayMaker
             return "Fsm will not respond to Event: " + eventName;
         }
 
-        #region Physics setup helpers
+#region Physics setup helpers
 
         //[Obsolete("Use CheckPhysicsSetup(gameObject) instead")]
         public static string CheckPhysicsSetup(FsmOwnerDefault ownerDefault)
@@ -643,13 +520,37 @@ namespace HutongGames.PlayMaker
             return error;
         }
 
-        #endregion
+#endregion
 
-        #region Logging helpers
+#region Logging helpers
 
         public static void DebugLog(Fsm fsm, LogLevel logLevel, string text, bool sendToUnityLog = false)
         {
 #if FSM_LOG
+            // Logging is disabled in builds so we need to handle this
+            // case separately so actions log properly in builds
+
+            if (!Application.isEditor && sendToUnityLog)
+            {
+                var logText = FormatUnityLogString(text);
+
+                switch (logLevel)
+                {
+                    case LogLevel.Warning:
+                        Debug.LogWarning(logText);
+                        break;
+                    case LogLevel.Error:
+                        Debug.LogError(logText);
+                        break;
+                    default:
+                        Debug.Log(logText);
+                        break;
+                }	
+            }
+
+            // Note: FsmLog.LoggingEnabled is always false in builds!
+            // Maybe replace this with Fsm property so we can turn on/off per Fsm?
+
             if (!FsmLog.LoggingEnabled || fsm == null)
             {
                 return;
@@ -682,12 +583,55 @@ namespace HutongGames.PlayMaker
             DebugLog(FsmExecutionStack.ExecutingFsm, LogLevel.Warning, text, true);
         }
 
-        #endregion
+        /// <summary>
+        /// Format a log string suitable for the Unity Log.
+        /// The Unity Log lacks some context, so we bake it into the log string.
+        /// </summary>
+        /// <param name="text">Text to log.</param>
+        /// <returns>String formatted for the Unity Log.</returns>
+        public static string FormatUnityLogString(string text)
+        {
+            if (FsmExecutionStack.ExecutingFsm == null) return text;
 
-        #region AutoName helpers
-  
+            var logString = Fsm.GetFullFsmLabel(FsmExecutionStack.ExecutingFsm);
+
+            if (FsmExecutionStack.ExecutingState != null)
+            {
+                logString += " : " + FsmExecutionStack.ExecutingStateName;
+            }
+            
+            if (FsmExecutionStack.ExecutingAction != null)
+            {
+                logString += FsmExecutionStack.ExecutingAction.Name;
+            }
+            
+            logString += " : " + text;
+
+            return logString;
+        }
+
+
+#endregion
+
+#region AutoName helpers
+
+        public const string colon = ": ";
+        
+        public static string StripTags(string textWithTags)
+        {
+            // Too expensive?
+            //return Regex.Replace(textWithTags, "<.*?>", string.Empty);
+
+            textWithTags = textWithTags.Replace("<i>", "");
+            textWithTags = textWithTags.Replace("</i>", "");
+            textWithTags = textWithTags.Replace("<b>", "");
+            textWithTags = textWithTags.Replace("</b>", "");
+            return textWithTags;
+        }
+
         public static string GetValueLabel(INamedVariable variable)
         {
+#if UNITY_EDITOR
             if (variable == null) return "[null]";
             if (variable.IsNone) return "[none]";
             if (variable.UseVariable) return variable.Name;
@@ -695,16 +639,26 @@ namespace HutongGames.PlayMaker
             if (rawValue == null) return "null";
             if (rawValue is string) return "\"" + rawValue + "\"";
             if (rawValue is Array) return "Array";
-#if NETFX_CORE
-            if (rawValue.GetType().IsValueType()) return rawValue.ToString();
+            
+            // A class might throw an error in ToString() so try/catch
+            // see: https://hutonggames.com/playmakerforum/index.php?topic=24485
+            try
+            {
+                if (rawValue.GetType().IsValueType) return rawValue.ToString();
+                var label = rawValue.ToString();
+                var classIndex = label.IndexOf('(');
+                if (classIndex > 0)
+                    return label.Substring(0, label.IndexOf('('));
+                return label;
+            }
+            catch
+            {
+                return "";
+            }
+
 #else
-            if (rawValue.GetType().IsValueType) return rawValue.ToString();
+            return "";
 #endif
-            var label = rawValue.ToString();
-            var classIndex = label.IndexOf('(');
-            if (classIndex > 0)
-                return label.Substring(0, label.IndexOf('('));
-            return label;
         }
 
         public static string GetValueLabel(Fsm fsm, FsmOwnerDefault ownerDefault)
@@ -715,30 +669,93 @@ namespace HutongGames.PlayMaker
         }
 
 
+
         /// <summary>
-        /// ActionName : field1 field2 ...
+        /// ActionName: field1 field2 ...
         /// </summary>
         public static string AutoName(FsmStateAction action, params INamedVariable[] exposedFields)
         {
             return action == null ? null : AutoName(action.GetType().Name, exposedFields);
         }
 
+
         /// <summary>
-        /// ActionName : field1 field2 ...
+        /// ActionName: ownerDefault
+        /// </summary>
+        public static string AutoName(FsmStateAction action, Fsm fsm, FsmOwnerDefault ownerDefault)
+        {
+            return action == null ? null : AutoName(action.GetType().Name, GetValueLabel(fsm, ownerDefault));
+        }
+
+
+        /// <summary>
+        /// ActionName: label1 label2 ...
+        /// </summary>
+        public static string AutoName(FsmStateAction action, params string[] labels)
+        {
+            return action == null ? null : AutoName(action.GetType().Name, labels);
+        }
+
+        /// <summary>
+        /// ActionName: event
+        /// </summary>
+        public static string AutoName(FsmStateAction action, FsmEvent fsmEvent)
+        {
+            return action == null ? null : AutoName(action.GetType().Name, fsmEvent != null ? fsmEvent.Name : "None");
+        }
+
+        /// <summary>
+        /// ActionName: field1 field2 ...
         /// </summary>
         public static string AutoName(string actionName, params INamedVariable[] exposedFields)
         {
-            var autoName = actionName + " :";
+            var autoName = actionName + colon;
             foreach (var field in exposedFields)
             {
-                autoName += " " + GetValueLabel(field);
+                autoName += GetValueLabel(field) + " ";
             }
 
             return autoName;
         }
 
         /// <summary>
-        /// ActionName : min - max
+        /// ActionName: field1 field2 ...
+        /// </summary>
+        public static string AutoName(string actionName, params string[] labels)
+        {
+            var autoName = actionName + colon;
+            foreach (var label in labels)
+            {
+                autoName += label + " ";
+            }
+
+            return autoName;
+        }
+
+        /// <summary>
+        /// ActionName: ownerDefault field1 field2 ...
+        /// </summary>
+        public static string AutoName(FsmStateAction action, Fsm fsm, FsmOwnerDefault target, params INamedVariable[] exposedFields)
+        {
+            return action == null ? null : AutoName(action.GetType().Name, fsm, target, exposedFields);
+        }
+
+        /// <summary>
+        /// ActionName: ownerDefault field1 field2 ...
+        /// </summary>
+        public static string AutoName(string actionName, Fsm fsm, FsmOwnerDefault target, params INamedVariable[] exposedFields)
+        {
+            var autoName = actionName + colon + GetValueLabel(fsm, target) + " ";
+            foreach (var field in exposedFields)
+            {
+                autoName += GetValueLabel(field) + " ";
+            }
+
+            return autoName;
+        }
+
+        /// <summary>
+        /// ActionName: min - max
         /// </summary>
         public static string AutoNameRange(FsmStateAction action, NamedVariable min, NamedVariable max)
         {
@@ -746,15 +763,15 @@ namespace HutongGames.PlayMaker
         }
 
         /// <summary>
-        /// ActionName : min - max
+        /// ActionName: min - max
         /// </summary>
         public static string AutoNameRange(string actionName, NamedVariable min, NamedVariable max)
         {
-            return actionName + " : " + GetValueLabel(min) + " - " + GetValueLabel(max);
+            return actionName + colon + GetValueLabel(min) + " - " + GetValueLabel(max);
         }
 
         /// <summary>
-        /// ActionName : var = value
+        /// ActionName: var = value
         /// </summary>
         public static string AutoNameSetVar(FsmStateAction action, NamedVariable var, NamedVariable value)
         {
@@ -762,15 +779,15 @@ namespace HutongGames.PlayMaker
         }
 
         /// <summary>
-        /// ActionName : var = value
+        /// ActionName: var = value
         /// </summary>
         public static string AutoNameSetVar(string actionName, NamedVariable var, NamedVariable value)
         {
-            return actionName + " : " + GetValueLabel(var) + " = " + GetValueLabel(value);
+            return actionName + colon + GetValueLabel(var) + " = " + GetValueLabel(value);
         }
 
         /// <summary>
-        /// [-Convert]ActionName : fromVar to toVar
+        /// [-Convert]ActionName: fromVar to toVar
         /// </summary>
         public static string AutoNameConvert(FsmStateAction action, NamedVariable fromVariable, NamedVariable toVariable)
         {
@@ -778,15 +795,15 @@ namespace HutongGames.PlayMaker
         }
 
         /// <summary>
-        /// [-Convert]ActionName : fromVar to toVar
+        /// [-Convert]ActionName: fromVar to toVar
         /// </summary>
         public static string AutoNameConvert(string actionName, NamedVariable fromVariable, NamedVariable toVariable)
         {
-            return actionName.Replace("Convert","") + " : " + GetValueLabel(fromVariable) + " to " + GetValueLabel(toVariable);
+            return actionName.Replace("Convert","") + colon + GetValueLabel(fromVariable) + " to " + GetValueLabel(toVariable);
         }
 
         /// <summary>
-        /// ActionName : property -> store
+        /// ActionName: property -> store
         /// </summary>
         public static string AutoNameGetProperty(FsmStateAction action, NamedVariable property, NamedVariable store)
         {
@@ -794,16 +811,16 @@ namespace HutongGames.PlayMaker
         }
 
         /// <summary>
-        /// ActionName : property -> store
+        /// ActionName: property -> store
         /// </summary>
         public static string AutoNameGetProperty(string actionName, NamedVariable property, NamedVariable store)
         {
-            return actionName + " : " + GetValueLabel(property) + " -> " + GetValueLabel(store);
+            return actionName + colon + GetValueLabel(property) + " -> " + GetValueLabel(store);
         }
 
-        #endregion
+#endregion
 
-        #region Editor helpers
+#region Editor helpers
 
 #if UNITY_EDITOR
 
@@ -819,62 +836,131 @@ namespace HutongGames.PlayMaker
             rect.width -= labelWidth + 30;
             return rect;
         }
-    
-                public static Vector3 DoTargetPositionHandle(Vector3 worldPos, PositionOptions option, Transform owner, FsmGameObject target)
+
+        private static Vector2 axisCenter, xAxisMin, xAxisMax, yAxisMin, yAxisMax;
+
+        public static Vector2 DrawAxisXY(Rect area)
         {
-            //var worldPos = GetTargetPosition(option, owner, target, position);
+            var handlesColor = Handles.color;
 
-            EditorGUI.BeginChangeCheck();
+            axisCenter.x = area.x + area.width * 0.5f;
+            axisCenter.y = area.y + area.height * 0.5f;
 
-            var rotation = Quaternion.identity;
-            var newPos = worldPos;
-           
-            switch (option)
-            {
-                case PositionOptions.CurrentPosition:
-                    break;
+            xAxisMin = axisCenter;
+            xAxisMax.x = xAxisMin.x + 10;
+            xAxisMax.y = xAxisMin.y;
 
-                case PositionOptions.WorldPosition:
-                    newPos = Handles.PositionHandle(worldPos, rotation);
-                    break;
+            yAxisMin = axisCenter;
+            yAxisMax.x = yAxisMin.x;
+            yAxisMax.y = yAxisMin.y - 10;
 
-                case PositionOptions.LocalPosition:
-                    if (owner.parent != null)
-                    {
-                        rotation = owner.parent.transform.rotation;
-                        newPos = owner.parent.InverseTransformPoint(Handles.PositionHandle(worldPos, rotation));
-                    }
-                    else
-                    {
-                        newPos = Handles.PositionHandle(worldPos, rotation);
-                    }
-                    break;
+            //var xAxisColor = ;
+            //xAxisColor.a = 0.5f;
+            Handles.color = Handles.xAxisColor;
+            Handles.DrawLine(xAxisMin, xAxisMax);
+            
+            //var yAxisColor = Color.green;
+            //yAxisColor.a = 0.5f;
+            Handles.color = Handles.yAxisColor;
+            Handles.DrawLine(yAxisMin, yAxisMax);
 
-                case PositionOptions.WorldOffset:
-                    newPos = Handles.PositionHandle(worldPos, rotation) - owner.position;
-                    break;
+            Handles.color = handlesColor;
 
-                case PositionOptions.LocalOffset:
-                    rotation = owner.rotation;
-                    newPos = owner.InverseTransformPoint(Handles.PositionHandle(worldPos, rotation)) ;
-                    break;
+            return axisCenter;
+        }
 
-                case PositionOptions.TargetGameObject:
-                    if (target.Value == null) return worldPos;
-                    rotation = target.Value.transform.rotation;
-                    newPos = target.Value.transform.InverseTransformPoint(Handles.PositionHandle(worldPos, rotation));
-                    break;
+        public static void DrawCircle(Vector2 center, float radius, Color color, float alpha)
+        {
+            color.a = alpha;
+            DrawCircle(center, radius, color);
+        }
 
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+        public static void DrawCircle(Vector2 center, float radius, Color color)
+        {
+            var handlesColor = Handles.color;
+            Handles.color = color;
+            DrawCircle(center, radius);
+            Handles.color = handlesColor;
+        }
 
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(owner, "Move Scene Gizmo");
-            }
+        public static void DrawCircle(Vector2 center, float radius)
+        {
+            Handles.DrawWireArc(center, Vector3.forward, Vector3.left, 360, radius);
+        }
 
-            return newPos;
+        public static void DrawOval(Vector2 center, float xRadius, float yRadius)
+        {
+            var matrix = Handles.matrix;
+
+            var yScale = yRadius / xRadius;
+            if (yScale < 0.00001f) yScale = 0.00001f;
+            Handles.matrix *= Matrix4x4.Scale(new Vector3(1, yScale,1f));
+            center.y /= yScale;
+            Handles.DrawWireArc(center, Vector3.forward, Vector3.left, 360, xRadius);
+
+            Handles.matrix = matrix;
+        }
+
+        public static void DrawSpoke(Vector2 center, float angle, float minLength, float maxLength, float xScale = 1f, float yScale = 1f)
+        {
+            Vector2 start, end;
+
+            var radians = Mathf.Deg2Rad * angle;
+            start.x = axisCenter.x + Mathf.Cos(radians) * minLength * xScale;
+            start.y = axisCenter.y + Mathf.Sin(radians) * minLength * yScale;
+            end.x = axisCenter.x + Mathf.Cos(radians) * maxLength * xScale;
+            end.y = axisCenter.y + Mathf.Sin(radians) * maxLength * yScale;
+
+            Handles.DrawLine(start, end);
+        }
+
+        public static void DrawArc(Vector2 center, float fromAngle, float toAngle, float xRadius, float yRadius)
+        {
+            var matrix = Handles.matrix;
+
+            var yScale = yRadius / xRadius;
+            if (yScale < 0.00001f) yScale = 0.00001f;
+            Handles.matrix *= Matrix4x4.Scale(new Vector3(1, yScale,1f));
+            center.y /= yScale;
+
+            var radians = Mathf.Deg2Rad * fromAngle;
+            var from = new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+            Handles.DrawWireArc(center, Vector3.forward, from, toAngle - fromAngle, xRadius);
+
+            Handles.matrix = matrix;
+        }
+
+        private static Rect tempRect = new Rect();
+        public static void DrawRect(Vector2 center, float xLength, float yLength)
+        {
+            tempRect.Set(center.x-xLength, center.y-yLength, xLength*2, yLength*2);
+            DrawRect(tempRect);
+        }
+
+        public static void DrawRect(Rect rect, Color color, float alpha)
+        {
+            color.a = alpha;
+            DrawRect(rect, color);
+        }
+
+        public static void DrawRect(Rect rect, Color color)
+        {
+            var handlesColor = Handles.color;
+            Handles.color = color;
+            DrawRect(rect);
+            Handles.color = handlesColor;
+        }
+
+        public static void DrawRect(Rect rect)
+        {
+            var framePoints = new Vector3[5];
+            framePoints[0] = new Vector3(rect.x, rect.y);
+            framePoints[1] = new Vector3(rect.xMax, rect.y);
+            framePoints[2] = new Vector3(rect.xMax, rect.yMax);
+            framePoints[3] = new Vector3(rect.x, rect.yMax);
+            framePoints[4] = new Vector3(rect.x, rect.y);
+
+            Handles.DrawPolyLine(framePoints);
         }
 
         /// <summary>
@@ -899,8 +985,9 @@ namespace HutongGames.PlayMaker
             {
                 transform = go.transform;
                 rotation = transform.rotation;
-                Handles.Label(transform.position, go.name, "Box");
-                Handles.DrawDottedLine(transform.position, worldPos, 2f);
+                var pos = transform.position;
+                Handles.Label(pos, go.name, "Box");
+                Handles.DrawDottedLine(pos, worldPos, 2f);
             }
 
             worldPos = Handles.PositionHandle(worldPos, rotation);
@@ -939,6 +1026,50 @@ namespace HutongGames.PlayMaker
 #endif
 
             Handles.color = originalColor;
+        }
+
+        public static void DrawTexture(Vector2 position, Texture texture, float angle, Vector2 anchor)
+        {
+            var matrix = Handles.matrix;
+
+            //Handles.matrix *= Matrix4X4Rotate(Quaternion.AngleAxis(angle, Vector3.forward));
+            
+            RotateHandlesAroundPivot(angle, position);
+            Handles.Label(position, texture);
+
+
+            Handles.matrix = matrix;
+        }
+
+        public static bool IsHotControl(bool hotControlFlag)
+        {
+            var tempString = GUI.GetNameOfFocusedControl();
+            if (!string.IsNullOrEmpty(tempString))
+            {
+                Debug.Log(tempString);
+            }
+            
+            if ((tempString == "xAxis" || tempString == "yAxis" || tempString == "zAxis") && GUIUtility.hotControl != 0)
+            {
+                hotControlFlag = true;  // declared elsewhere
+                //Debug.Log ("dragging");
+            }
+             
+            if ((tempString == "xAxis" || tempString == "yAxis" || tempString == "zAxis") && hotControlFlag && GUIUtility.hotControl == 0)
+            {
+                hotControlFlag = false;
+                Debug.Log ("released");
+            }
+
+            return hotControlFlag;
+        }
+
+        public static void RotateHandlesAroundPivot(float angle, Vector3 pivotPoint)
+        {
+            var matrix = Handles.matrix;
+            Handles.matrix = Matrix4x4.identity;
+            Vector2 vector3 = pivotPoint; // GUIClip.Unclip(pivotPoint);
+            Handles.matrix = Matrix4x4.TRS((Vector3) vector3, Quaternion.Euler(0.0f, 0.0f, angle), Vector3.one) * Matrix4x4.TRS((Vector3) (-vector3), Quaternion.identity, Vector3.one) * matrix;
         }
 
         /// <summary>
@@ -1008,7 +1139,8 @@ namespace HutongGames.PlayMaker
             var rectTransform = gameObject.GetComponent<RectTransform>();
             if (rectTransform)
             {
-                return new Bounds(rectTransform.rect.center, rectTransform.rect.size);
+                var rect = rectTransform.rect;
+                return new Bounds(rect.center, rect.size);
             }
 
             var renderer = gameObject.GetComponent<Renderer>();
@@ -1138,11 +1270,48 @@ namespace HutongGames.PlayMaker
             Handles.color = originalColor;
         }
 
-#endif
+        // https://forum.unity.com/threads/drawing-capsule-gizmo.354634/
+        public static void DrawWireCapsule(Vector3 _pos, Vector3 _pos2, float _radius, Color _color)
+        {
+            var color = Handles.color;
+            Handles.color = _color;
 
-        #endregion
+            var forward = _pos2 - _pos;
+            var _rot = Quaternion.LookRotation(forward);
+            var pointOffset = _radius / 2f;
+            var length = forward.magnitude;
+            var center2 = new Vector3(0f, 0, length);
 
-        #region Obsolete
+            Matrix4x4 angleMatrix = Matrix4x4.TRS(_pos, _rot, Handles.matrix.lossyScale);
+
+            using (new Handles.DrawingScope(angleMatrix))
+            {
+                Handles.DrawWireDisc(Vector3.zero, Vector3.forward, _radius);
+                Handles.DrawWireArc(Vector3.zero, Vector3.up, Vector3.left * pointOffset, -180f, _radius);
+                Handles.DrawWireArc(Vector3.zero, Vector3.left, Vector3.down * pointOffset, -180f, _radius);
+                Handles.DrawWireDisc(center2, Vector3.forward, _radius);
+                Handles.DrawWireArc(center2, Vector3.up, Vector3.right * pointOffset, -180f, _radius);
+                Handles.DrawWireArc(center2, Vector3.left, Vector3.up * pointOffset, -180f, _radius);
+
+                DrawLine(_radius, 0f, length);
+                DrawLine(-_radius, 0f, length);
+                DrawLine(0f, _radius, length);
+                DrawLine(0f, -_radius, length);
+            }
+
+            Handles.color = color;
+        }
+
+        private static void DrawLine(float arg1, float arg2, float forward)
+        {
+            Handles.DrawLine(new Vector3(arg1, arg2, 0f), new Vector3(arg1, arg2, forward));
+        }
+
+#endif //UNITY_EDITOR
+
+#endregion
+
+#region Obsolete
 
         /// <summary>
         /// Actions should use this for consistent error messages.
@@ -1151,10 +1320,10 @@ namespace HutongGames.PlayMaker
         [Obsolete("Use LogError instead.")]
         public static void RuntimeError(FsmStateAction action, string error)
         {
-            action.LogError(action + " : " + error);
+            action.LogError(action + colon + error);
         }
 
-        #endregion
+#endregion
 
     }
 }

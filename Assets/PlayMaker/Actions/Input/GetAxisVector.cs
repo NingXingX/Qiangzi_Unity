@@ -1,12 +1,26 @@
-// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+// (c) Copyright HutongGames, LLC 2010-2021. All rights reserved.
 
+// NOTE: The new Input System and legacy Input Manager can both be enabled in a project.
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#define NEW_INPUT_SYSTEM_ONLY
+#endif
+
+using System;
+
+#if !NEW_INPUT_SYSTEM_ONLY
 using UnityEngine;
+#endif
 
 namespace HutongGames.PlayMaker.Actions
 {
+#if NEW_INPUT_SYSTEM_ONLY
+    [Obsolete("This action is not supported in the new Input System. " +
+              "Use PlayerInputGetMoveVector or GamepadGetStickValue instead.")]
+#endif
     [NoActionTargets]
 	[ActionCategory(ActionCategory.Input)]
 	[Tooltip("Gets a world direction Vector from 2 Input Axis. Typically used for a third person controller with Relative To set to the camera.")]
+    [SeeAlso("Unity Input Manager")]
 	public class GetAxisVector : FsmStateAction
 	{
 		public enum AxisPlane
@@ -22,23 +36,25 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("The name of the vertical input axis. See Unity Input Manager.")]
 		public FsmString verticalAxis;
 		
-		[Tooltip("Input axis are reported in the range -1 to 1, this multiplier lets you set a new range.")]
+		[Tooltip("Normally axis values are in the range -1 to 1. Use the multiplier to make this range bigger. " +
+                 "\nE.g., A multiplier of 100 returns values from -100 to 100.\nTypically this represents the maximum movement speed.")]
 		public FsmFloat multiplier;
 		
 		[RequiredField]
-		[Tooltip("The world plane to map the 2d input onto.")]
+		[Tooltip("Sets the world axis the input maps to. The remaining axis will be set to zero.")]
 		public AxisPlane mapToPlane;
 		
-		[Tooltip("Make the result relative to a GameObject, typically the main camera.")]
+		[Tooltip("Calculate a vector relative to this game object. Typically the camera.")]
 		public FsmGameObject relativeTo;
 		
 		[RequiredField]
 		[UIHint(UIHint.Variable)]
-		[Tooltip("Store the direction vector.")]
+		[Tooltip("Store the resulting vector. You can use this in {{Translate}} or other movement actions.")]
 		public FsmVector3 storeVector;
 		
 		[UIHint(UIHint.Variable)]
-		[Tooltip("Store the length of the direction vector.")]
+		[Tooltip("Store the magnitude of the vector. Useful if you want to measure the strength of the input and react accordingly. " +
+                 "Hint: Use {{Float Compare}}.")]
 		public FsmFloat storeMagnitude;
 
 		public override void Reset()
@@ -53,7 +69,8 @@ namespace HutongGames.PlayMaker.Actions
 
 		public override void OnUpdate()
 		{
-			var forward = new Vector3();
+#if !NEW_INPUT_SYSTEM_ONLY
+            var forward = new Vector3();
 			var right = new Vector3();
 			
 			if (relativeTo.Value == null)
@@ -121,7 +138,17 @@ namespace HutongGames.PlayMaker.Actions
 			{
 				storeMagnitude.Value = direction.magnitude;
 			}
+#endif
 		}
-	}
+
+#if NEW_INPUT_SYSTEM_ONLY
+
+        public override string ErrorCheck()
+        {
+            return "This action is not supported in the new Input System." +
+                   "Use PlayerInputGetMoveVector or GamepadGetStickValue instead.";
+        }
+#endif
+    }
 }
 

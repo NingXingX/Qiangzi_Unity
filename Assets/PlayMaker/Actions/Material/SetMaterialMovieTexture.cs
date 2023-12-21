@@ -1,15 +1,24 @@
-﻿// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+﻿// (c) Copyright HutongGames, LLC 2010-2020. All rights reserved.
 
-#if !(UNITY_SWITCH || UNITY_TVOS || UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID || UNITY_FLASH || UNITY_PS3 || UNITY_PS4 || UNITY_XBOXONE || UNITY_BLACKBERRY || UNITY_METRO || UNITY_WP8 || UNITY_PSM || UNITY_WEBGL || UNITY_SWITCH)
+#if !(UNITY_SWITCH || UNITY_TVOS || UNITY_IPHONE || UNITY_IOS || UNITY_ANDROID || UNITY_FLASH || UNITY_PS3 || UNITY_PS4 || UNITY_XBOXONE || UNITY_BLACKBERRY || UNITY_METRO || UNITY_WP8 || UNITY_PSM || UNITY_WEBGL)
 
+using System;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Video;
+
+#if UNITY_2018_2_OR_NEWER
+#pragma warning disable 618  
+#endif
 
 namespace HutongGames.PlayMaker.Actions
 {
+
 	[ActionCategory(ActionCategory.Material)]
-	[Tooltip("Sets a named texture in a game object's material to a movie texture.")]
+#if UNITY_2019_3_OR_NEWER
+    // Mark Obsolete but keep parameters
+    // so user can convert them to new actions.
+    [Obsolete("Use VideoPlayer actions instead.")]
+#endif
+    [Tooltip("Sets a named texture in a game object's material to a movie texture.")]
 	public class SetMaterialMovieTexture : ComponentAction<Renderer>
 	{
 		[Tooltip("The GameObject that the material is applied to.")]
@@ -27,8 +36,11 @@ namespace HutongGames.PlayMaker.Actions
 		public FsmString namedTexture;
 
 		[RequiredField]
-		[ObjectType(typeof(VideoPlayer))]
-		public FsmObject movieTexture;
+#if !UNITY_2019_3_OR_NEWER
+        [ObjectType(typeof(MovieTexture))]
+#endif
+        [Tooltip("The Movie Texture to use.")]
+        public FsmObject movieTexture;
 
 		public override void Reset()
 		{
@@ -47,14 +59,15 @@ namespace HutongGames.PlayMaker.Actions
 
 		void DoSetMaterialTexture()
 		{
-			var movie = movieTexture.Value as VideoPlayer;
+#if !UNITY_2019_3_OR_NEWER
+			var movie = movieTexture.Value as MovieTexture;
 
 			var namedTex = namedTexture.Value;
 			if (namedTex == "") namedTex = "_MainTex";
 
 			if (material.Value != null)
 			{
-				material.Value.SetTexture(namedTex, movie.texture);
+				material.Value.SetTexture(namedTex, movie);
 				return;
 			}
 
@@ -72,16 +85,24 @@ namespace HutongGames.PlayMaker.Actions
 
 			if (materialIndex.Value == 0)
 			{
-				renderer.material.SetTexture(namedTex, movie.texture);
+				renderer.material.SetTexture(namedTex, movie);
 			}
 			else if (renderer.materials.Length > materialIndex.Value)
 			{
 				var materials = renderer.materials;
-				materials[materialIndex.Value].SetTexture(namedTex, movie.texture);
+				materials[materialIndex.Value].SetTexture(namedTex, movie);
 				renderer.materials = materials;
 			}
-		}
-	}
+#endif
+        }
+
+#if UNITY_2019_3_OR_NEWER
+        public override string ErrorCheck()
+        {
+            return "MovieTexture is Obsolete. Use VideoPlayer actions instead.";
+        }
+#endif
+    }
 }
 
 #endif

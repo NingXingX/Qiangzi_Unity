@@ -8,7 +8,8 @@ using System.Collections.Generic;
 namespace HutongGames.PlayMaker.Actions
 {
     [ActionCategory(ActionCategory.ScriptControl)]
-    [Tooltip("Call a static method in a class.")]
+    [Tooltip("Call a static method in a class." +
+             "\nNOTE: This is an advanced action - you need to know the full method signature to use this action.")]
     public class CallStaticMethod : FsmStateAction
     {
         [Tooltip("Full path to the class that contains the static method.")]
@@ -107,12 +108,24 @@ namespace HutongGames.PlayMaker.Actions
             cachedMethodInfo = cachedType.GetTypeInfo().GetDeclaredMethod(methodName.Value);
 #else
 			var types = new List<Type>( capacity: parameters.Length );
-			foreach ( var each in parameters ) {
-				types.Add( each.RealType );
+			foreach ( var each in parameters ) 
+            {
+                if (each != null && each.RealType != null)
+                {
+                    types.Add( each.RealType );
+                }
 			}
 
-            cachedMethodInfo = cachedType.GetMethod(methodName.Value, types.ToArray());
+            try
+            {
+                cachedMethodInfo = cachedType.GetMethod(methodName.Value, types.ToArray());
+            }
+            catch (Exception e)
+            {
+                errorString += e.Message + "\n";
+            }
 #endif            
+
             if (cachedMethodInfo == null)
             {
                 errorString += "Invalid Method Name or Parameters: " + methodName.Value +"\n";

@@ -1,4 +1,4 @@
-// (c) Copyright HutongGames, LLC 2010-2018. All rights reserved.
+// (c) Copyright HutongGames, LLC. All rights reserved.
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -17,6 +17,10 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("Repeat every frame.")]
 		public bool everyFrame;
 		
+        [Tooltip("When to update the action." + 
+                 "\nOnUpdate: The most common setting." + 
+                 "\nOnLateUpdate: Update after everything else. Useful if dependent on another GameObect, e.g. following." + 
+                 "\nOnFixedUpdate: Used to update physics e.g., GameObjects with RigidBody components.")]
 		public UpdateType updateType;
 			
 		public abstract void OnActionUpdate();
@@ -31,8 +35,12 @@ namespace HutongGames.PlayMaker.Actions
 		{
 			if (updateType == UpdateType.OnFixedUpdate)
 			{
-				   Fsm.HandleFixedUpdate = true;
+	            Fsm.HandleFixedUpdate = true;
 			}
+            else if (updateType == UpdateType.OnLateUpdate)
+            {
+                Fsm.HandleLateUpdate = true;
+            }
 		}
 		
 		public override void OnUpdate()

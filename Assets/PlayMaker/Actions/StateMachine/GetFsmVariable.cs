@@ -23,10 +23,11 @@ namespace HutongGames.PlayMaker.Actions
 		[Tooltip("Store the value of the FsmVariable")]
         public FsmVar storeValue;
 
-        [Tooltip("Repeat every frame.")]
+        [Tooltip("Repeat every frame. Useful if the value is changing.")]
         public bool everyFrame;
 
         private GameObject cachedGO;
+        private string cachedFsmName;
         private PlayMakerFSM sourceFsm;
         private INamedVariable sourceVariable;
         private NamedVariable targetVariable;
@@ -63,7 +64,7 @@ namespace HutongGames.PlayMaker.Actions
                 return;
             }
 
-            if (go != cachedGO)
+            if (go != cachedGO || cachedFsmName != fsmName.Value)
             {
                 sourceFsm = ActionHelpers.GetGameObjectFsm(go, fsmName.Value);
                 sourceVariable = sourceFsm.FsmVariables.GetVariable(storeValue.variableName);
@@ -76,6 +77,7 @@ namespace HutongGames.PlayMaker.Actions
                 }
 
                 cachedGO = go;
+                cachedFsmName = fsmName.Value;
             }
         }
 
@@ -94,7 +96,7 @@ namespace HutongGames.PlayMaker.Actions
 #if UNITY_EDITOR
         public override string AutoName()
         {
-            return ("Get FSM Variable: " + ActionHelpers.GetValueLabel(storeValue.NamedVar));
+            return "Get FSM Variable: " + ActionHelpers.GetValueLabel(storeValue.NamedVar);
         }
 #endif
     }

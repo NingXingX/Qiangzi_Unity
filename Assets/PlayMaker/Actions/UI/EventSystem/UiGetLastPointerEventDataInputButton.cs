@@ -8,14 +8,18 @@ namespace HutongGames.PlayMaker.Actions
 	[Tooltip("Gets pointer data Input Button on the last System event.")]
 	public class UiGetLastPointerEventDataInputButton : FsmStateAction
 	{
+        [Tooltip("Store the Input Button pressed (Left, Right, Middle)")]
 		[UIHint(UIHint.Variable)]
 		[ObjectType(typeof(PointerEventData.InputButton))]
 		public FsmEnum inputButton;
 
+        [Tooltip("Event to send if Left Button clicked.")]
 		public FsmEvent leftClick;
 
+	    [Tooltip("Event to send if Middle Button clicked.")]
 		public FsmEvent middleClick;
 
+	    [Tooltip("Event to send if Right Button clicked.")]
 		public FsmEvent rightClick;
 
 
@@ -48,22 +52,17 @@ namespace HutongGames.PlayMaker.Actions
 				inputButton.Value = UiGetLastPointerDataInfo.lastPointerEventData.button;
 			}
 			
-			if (!string.IsNullOrEmpty(leftClick.Name) && 
-			    UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Left)
+			if (UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Left)
 			{
 				Fsm.Event(leftClick);
-				return;
 			}
 
-			if (!string.IsNullOrEmpty(middleClick.Name) && 
-			    UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Middle)
+			if (UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Middle)
 			{
 				Fsm.Event(middleClick);
-				return;
 			}
 
-			if (!string.IsNullOrEmpty(rightClick.Name) && 
-			    UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Right)
+			if (UiGetLastPointerDataInfo.lastPointerEventData.button == PointerEventData.InputButton.Right)
 			{
 				Fsm.Event(rightClick);
 			}

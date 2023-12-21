@@ -1,6 +1,19 @@
-// (c) Copyright HutongGames, LLC 2010-2013. All rights reserved.
+// (c) Copyright HutongGames, LLC 2010-2021. All rights reserved.
+
+// NOTE: The new Input System and legacy Input Manager can both be enabled in a project.
+// This action was developed for the old input manager, so we will use it if its available. 
+// If only the new input system is available we will try to use that instead,
+// but there might be subtle differences in the behaviour in the new system!
+
+#if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+#define NEW_INPUT_SYSTEM_ONLY
+#endif
 
 using UnityEngine;
+
+#if NEW_INPUT_SYSTEM_ONLY
+using UnityEngine.InputSystem;
+#endif
 
 namespace HutongGames.PlayMaker.Actions
 {
@@ -54,7 +67,39 @@ namespace HutongGames.PlayMaker.Actions
 		
 		public override void OnUpdate()
 		{
-			if (Input.touchCount > 0)
+#if NEW_INPUT_SYSTEM_ONLY
+            if (Touchscreen.current == null) return;
+
+            var touchCount = Touchscreen.current.touches.Count;
+            if (touchCount > 0)
+            {
+                var touch = Touchscreen.current.touches[0];
+                var touchPosition = touch.position.ReadValue();
+                var touchPhase = touch.phase.ReadValue().ToString();
+
+                switch (touchPhase)
+                {
+                    case "Began":
+                        touchStarted = true;
+                        touchStartPos = touchPosition;
+                        //touchStartTime = FsmTime.RealtimeSinceStartup;
+                        break;
+
+                    case "Ended":
+                        if (touchStarted)
+                        {
+                            TestForSwipeGesture(touchPosition);
+                            touchStarted = false;
+                        }
+                        break;
+
+                    case "Canceled":
+                        touchStarted = false;
+                        break;
+                }
+            }
+#else
+            if (Input.touchCount > 0)
 			{
 				var touch = Input.touches[0];
 				
@@ -72,7 +117,7 @@ namespace HutongGames.PlayMaker.Actions
 					
 					if (touchStarted)
 					{
-						TestForSwipeGesture(touch);
+						TestForSwipeGesture(touch.position);
 						touchStarted = false;
 					}
 					
@@ -101,13 +146,14 @@ namespace HutongGames.PlayMaker.Actions
 					break;
 				}
 			}
-		}
-		
-		void TestForSwipeGesture(Touch touch)
+#endif
+        }
+
+        private void TestForSwipeGesture(Vector2 touchPosition)
 		{
 			// test min distance
 			
-			var lastPos = touch.position;
+			var lastPos = touchPosition;
 			var distance = Vector2.Distance(lastPos, touchStartPos);
 			
 			if (distance > minSwipeDistancePixels)

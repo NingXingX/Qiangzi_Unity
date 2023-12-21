@@ -12,7 +12,7 @@ namespace HutongGames.PlayMaker.Actions
 		public FsmOwnerDefault gameObject;
 
 		[UIHint(UIHint.TextArea)]
-		[Tooltip("The text of the UGui Text component.")]
+		[Tooltip("The text of the UI Text component.")]
 		public FsmString text;
 
 		[Tooltip("Reset when exiting this state.")]
@@ -73,10 +73,10 @@ namespace HutongGames.PlayMaker.Actions
 		}
 
 #if UNITY_EDITOR
-	    public override string AutoName()
-	    {
-	        return "UISetText : " + ActionHelpers.GetValueLabel(text);
-	    }
+        public override string AutoName()
+        {
+            return ActionHelpers.AutoName("UISetText", text);
+        }
 #endif
-	}
+    }
 }

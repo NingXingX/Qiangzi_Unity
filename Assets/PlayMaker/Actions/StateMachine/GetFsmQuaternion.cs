@@ -19,16 +19,19 @@ namespace HutongGames.PlayMaker.Actions
 
 		[RequiredField]
 		[UIHint(UIHint.FsmQuaternion)]
-		public FsmString variableName;
+        [Tooltip("The name of the FSM variable to get.")]
+        public FsmString variableName;
 
 		[RequiredField]
 		[UIHint(UIHint.Variable)]
+        [Tooltip("Store the value in a Quaternion variable in this FSM.")]
 		public FsmQuaternion storeValue;
 
-		[Tooltip("Repeat every frame.")]
+        [Tooltip("Repeat every frame. Useful if the value is changing.")]
 		public bool everyFrame;
 
-		GameObject goLastFrame;
+        private GameObject goLastFrame;
+        private string fsmNameLastFrame;
 		protected PlayMakerFSM fsm;
 
 		public override void Reset()
@@ -55,7 +58,7 @@ namespace HutongGames.PlayMaker.Actions
 			DoGetFsmVariable();
 		}
 
-		void DoGetFsmVariable()
+        private void DoGetFsmVariable()
 		{
 			var go = Fsm.GetOwnerDefaultTarget(gameObject);
 			if (go == null)
@@ -63,11 +66,11 @@ namespace HutongGames.PlayMaker.Actions
 				return;
 			}
 
-			// only get the fsm component if go has changed
-
-			if (go != goLastFrame)
-			{
-				goLastFrame = go;
+            if (go != goLastFrame || fsmName.Value != fsmNameLastFrame)
+            {
+                goLastFrame = go;
+                fsmNameLastFrame = fsmName.Value;
+                // only get the fsm component if go or fsm name has changed
 				fsm = ActionHelpers.GetGameObjectFsm(go, fsmName.Value);
 			}
 
@@ -84,5 +87,13 @@ namespace HutongGames.PlayMaker.Actions
 			}
 		}
 
-	}
+#if UNITY_EDITOR
+
+        public override string AutoName()
+        {
+            return ActionHelpers.AutoName(this, variableName);
+        }
+
+#endif
+    }
 }
