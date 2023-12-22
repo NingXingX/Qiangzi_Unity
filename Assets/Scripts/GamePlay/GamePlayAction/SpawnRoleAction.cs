@@ -14,7 +14,7 @@ public class SpawnRoleAction : FsmStateAction
         var board = BoardMapCtrl.Instance;
 
         this.DebugSpawnRole(10001, 1, 1, 1, 1, new List<int> { 10011, 10012 });
-        this.DebugSpawnRole(10001, 1, 1, 0, 2, new List<int> { 10011, 10012 });
+        this.DebugSpawnRole(10002, 1, 1, 0, 2, new List<int> { 10011, 10012 });
         this.DebugSpawnRole(10001, 2, 1, 5, 5, new List<int> { 10013 });
 
         this.Finish();

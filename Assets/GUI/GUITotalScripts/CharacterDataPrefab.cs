@@ -20,18 +20,20 @@ public class CharacterDataPrefab : MonoBehaviour
 
     void Start()
     {
-        
+        UICharacterStateViewComp.Instance.OnRoleSelectEvent += Read_CharacterData_Info; 
     }
 
     
     void Update()
     {
-        Read_CharacterData_Info(this.nowRole,statsNameInText);
+        Read_CharacterData_Info(this.nowRole);
     }
 
     //读取角色属性信息
-    public void Read_CharacterData_Info(Role role,string statsname)
+    public void Read_CharacterData_Info(Role role)
     {
+        string statsname = this.statsNameInText;
+
         this.nowRole = role;
         if (this.nowRole == null)
         {

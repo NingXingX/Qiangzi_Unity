@@ -69,6 +69,16 @@ public class Role
 
         //新增变量
         this.GroupID = this.attribute.GroupID;
+        this.HpRegeneration = this.attribute.HpRegeneration;
+        this.HpSteal = this.attribute.HpSteal;
+        this.ShieldsRegeneration = this.attribute.ShieldsRegeneration;
+        this.PhysicalIntensity = this.attribute.PhysicalIntensity;
+        this.ManaIntensity = this.attribute.ManaIntensity;
+        this.ReligiousIntensity = this.attribute.ReligiousIntensity;
+        this.ArmorIntensity = this.attribute.ArmorIntensity;
+        this.CritRate = this.attribute.CritRate;
+        this.HitRate = this.attribute.HitRate;
+        this.DodgeRate = this.attribute.DodgeRate;
 
 
         this.OwnComp = null;

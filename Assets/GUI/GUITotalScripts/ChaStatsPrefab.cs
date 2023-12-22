@@ -21,6 +21,8 @@ public class ChaStatsPrefab : MonoBehaviour
     [Header("变量")]
     private Role cachedRole;
 
+    public UICharacterStateViewComp OwnComp;
+
 
 
     void Start()
@@ -143,8 +145,6 @@ public class ChaStatsPrefab : MonoBehaviour
 
     public void ChangeNowCharacterID()
     {
-        CharacterManager.nowChaLevel = CharacterLevel;
-        CharacterManager.nowChaID = CharacterID;
-        print("当前角色ID为：" + CharacterManager.nowChaID);
+        this.OwnComp.RoleOnSelect(this.cachedRole);
     }
 }

@@ -1,15 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UICharacterStateViewComp : MonoBehaviour
 {
+    static private UICharacterStateViewComp instance;
+
+    static public UICharacterStateViewComp Instance
+    {
+        get
+        {
+            return instance;
+        }
+    }
+
+
     public GameObject ChatacterStatePrefab;
 
     private List<ChaStatsPrefab> cs;
 
+    public UnityAction<Role> OnRoleSelectEvent;
+
     private void Awake()
     {
+        instance = this;
         this.cs = new List<ChaStatsPrefab>();
     }
 
@@ -50,6 +65,13 @@ public class UICharacterStateViewComp : MonoBehaviour
     private void AddNewCS()
     {
         var go = Instantiate(ChatacterStatePrefab, this.transform);
-        this.cs.Add(go.GetComponent<ChaStatsPrefab>());
+        var csp = go.GetComponent<ChaStatsPrefab>();
+        this.cs.Add(csp);
+        csp.OwnComp = this;
+    }
+
+    public void RoleOnSelect(Role role)
+    {
+        this.OnRoleSelectEvent.Invoke(role);
     }
 }
