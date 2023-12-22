@@ -17,6 +17,10 @@ public class ChaStatsPrefab : MonoBehaviour
     public Slider shieldSlider;
     //角色血量条组件
     public Slider hpSlider;
+    //血量数值文本组件
+    public Text hpText;
+    //护盾数值文本组件
+    public Text shieldText;
 
     [Header("变量")]
     private Role cachedRole;
@@ -107,6 +111,22 @@ public class ChaStatsPrefab : MonoBehaviour
             shieldSlider.value = result;
             hpSlider.value = result;
             //print(hpSlider.value);
+        }
+
+        //改变血量数值文本
+        Transform hp = transform.Find("血量数值文本");
+        if ( hp != null )
+        {
+            hpText = hp.GetComponent<Text>();
+            hpText.text = role.Hp + " / " + role.MaxHp;
+        }
+
+        //改变护盾数值文本
+        Transform shield = transform.Find("护盾数值文本");
+        if( shield != null )
+        {
+            shieldText = shield.GetComponent<Text>();
+            shieldText.text = role.Shields + " / " + role.MaxShield;
         }
     }
 

@@ -12,6 +12,7 @@ public class Role
     public int Level = 0;
     public int Hp = 0;
     public int MaxHp = 0;
+    public int MaxShield = 0;
     public int Shields = 0;
     public int ActionNum = 0;
     public int Speed;
@@ -61,6 +62,7 @@ public class Role
         this.Level = level;
         this.Hp = this.attribute.Hp;
         this.MaxHp = this.attribute.Hp;
+        this.MaxShield = this.attribute.Shields;
         this.Shields = this.attribute.Shields;
         this.ActionNum = this.attribute.ActionNum;
         this.EquipList = new List<RoleEquip>();
