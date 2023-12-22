@@ -24,6 +24,11 @@ public class UIEvents : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+    public void ToReadyPhase()
+    {
+        SceneManager.LoadScene(2);
+    }
+
 
     //回到主菜单
     public void BackToMainMenu()

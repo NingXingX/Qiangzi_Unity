@@ -21,6 +21,20 @@ public class Role
     public string CharTitle;
     public string CharName;
 
+    //新增的变量
+    public int GroupID = 0;
+    public int HpRegeneration;
+    public int HpSteal;
+    public int ShieldsRegeneration;
+    public int PhysicalIntensity;
+    public int ManaIntensity;
+    public int ReligiousIntensity;
+    public int ArmorIntensity;
+    public int CritRate;
+    public int HitRate;
+    public int DodgeRate;
+
+
     public RoleComp OwnComp;
 
 
@@ -52,6 +66,10 @@ public class Role
         this.EquipList = new List<RoleEquip>();
         this.CharTitle = this.character.CharTitle;
         this.CharName = this.character.CharName;
+
+        //新增变量
+        this.GroupID = this.attribute.GroupID;
+
 
         this.OwnComp = null;
     }

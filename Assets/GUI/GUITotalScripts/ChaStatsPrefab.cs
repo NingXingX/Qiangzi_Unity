@@ -19,8 +19,6 @@ public class ChaStatsPrefab : MonoBehaviour
     public Slider hpSlider;
 
     [Header("变量")]
-    public int prefabNumerInUI;
-
     private Role cachedRole;
 
 
@@ -147,7 +145,6 @@ public class ChaStatsPrefab : MonoBehaviour
     {
         CharacterManager.nowChaLevel = CharacterLevel;
         CharacterManager.nowChaID = CharacterID;
-        UIManager.nowCharacterNumberInUI = prefabNumerInUI;
         print("当前角色ID为：" + CharacterManager.nowChaID);
     }
 }

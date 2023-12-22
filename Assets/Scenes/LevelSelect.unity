@@ -2169,8 +2169,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1644962976}
-        m_TargetAssemblyTypeName: ChangeLevel, Assembly-CSharp
-        m_MethodName: ToLevel1_1
+        m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
+        m_MethodName: ToReadyPhase
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2250,6 +2250,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingPanel: {fileID: 691683776}
   isSettingPanelActive: 0
+  chaEquipPanel: {fileID: 0}
+  isEquipPanelActive: 0
 --- !u!4 &1644962977
 Transform:
   m_ObjectHideFlags: 0
