@@ -17,7 +17,7 @@ public class UIEvents : MonoBehaviour
 
 
  
-
+    
 
     public void ToLevelSelect()
     {
@@ -48,6 +48,7 @@ public class UIEvents : MonoBehaviour
         {
             SettingPanel();
         }
+
     }
 
     //打开设置面板

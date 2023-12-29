@@ -2096,6 +2096,7 @@ GameObject:
   - component: {fileID: 1626038084}
   - component: {fileID: 1626038083}
   - component: {fileID: 1626038082}
+  - component: {fileID: 1626038085}
   m_Layer: 5
   m_Name: ToLevel 1-1Button
   m_TagString: Untagged
@@ -2168,14 +2169,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1644962976}
-        m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
-        m_MethodName: ToReadyPhase
-        m_Mode: 1
+      - m_Target: {fileID: 1626038085}
+        m_TargetAssemblyTypeName: UIChangeScene, Assembly-CSharp
+        m_MethodName: SwitchLevel
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2218,6 +2219,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1626038080}
   m_CullTransparentMesh: 1
+--- !u!114 &1626038085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626038080}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1760c2ed504d57c459435c94f75b8c41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneIndex: 2
 --- !u!1 &1644962975
 GameObject:
   m_ObjectHideFlags: 0
