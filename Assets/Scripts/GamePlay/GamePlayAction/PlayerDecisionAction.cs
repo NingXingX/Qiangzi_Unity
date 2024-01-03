@@ -26,6 +26,7 @@ public class PlayerDecisionAction : FsmStateAction
         {
             this.Finish();
         }
+        var test = RoleSystem.Instance.GetRoleDic();
     }
 
     private void SetRoleMovePlan(CellComp lst, CellComp nxt)

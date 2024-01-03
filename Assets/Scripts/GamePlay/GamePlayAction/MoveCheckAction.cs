@@ -18,4 +18,5 @@ public class MoveCheckAction : FsmStateAction
         }
         this.Fsm.BroadcastEvent("NEEDMOVE");
     }
+
 }

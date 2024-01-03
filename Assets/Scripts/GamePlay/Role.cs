@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Role
 {
@@ -22,6 +23,8 @@ public class Role
     public string CharTitle;
     public string CharName;
 
+    private List<BaseFeature> features = new List<BaseFeature>();
+
     //新增的变量
     public int GroupID = 0;
     public int HpRegeneration;
@@ -38,7 +41,7 @@ public class Role
 
     public RoleComp OwnComp;
 
-
+    //初始化
     public void Init(ulong gid, int teamId, int characterID, int level = 1, int rowPos = 0, int colPos = 0)
     {
         this.character = CharacterDataLoader.Instance.GetData(characterID);
@@ -86,6 +89,7 @@ public class Role
         this.OwnComp = null;
     }
 
+    //绑定游戏对象
     public void BindComp(RoleComp ownComp)
     {
         this.OwnComp = ownComp;
@@ -95,6 +99,7 @@ public class Role
         }
     }
 
+    //添加装备（暂时没有检查）
     public void AddEquip(int equipId)
     {
         var equipData = new RoleEquip();
@@ -106,11 +111,41 @@ public class Role
         this.EquipList.Add(equipData);
     }
 
+    //受伤
     public void GetHurt(int damage)
     {
         int realDamage = Mathf.Min(this.Hp, damage);
         this.Hp -= realDamage;
         //Debug.Log(string.Format("{0} get hurt {1}", this.Gid, realDamage));
         this.OwnComp.UpdataHealth();
+    }
+
+    //添加buff
+    public void AddBuff(int buffId)
+    {
+        var buffData = Features_buffDataLoader.Instance.GetData(buffId);
+
+        string buffClassName = "HPBuff";
+        var buffType = Type.GetType(buffClassName);
+        var newBuff = Activator.CreateInstance(buffType) as BaseFeature;
+
+        newBuff.OwnRole = this;
+        this.features.Add(newBuff);
+
+        this.UpdataState();
+    }
+
+    //更新状态
+    public void UpdataState()
+    {
+        this.MaxHp = this.attribute.Hp;
+        foreach (var feature in this.features)
+        {
+            if (feature.GetFeatureType() == FeatureType.BUFF)
+            {
+                var buff = feature as BuffFeature;
+                buff.CalcBuff();
+            }
+        }
     }
 }
