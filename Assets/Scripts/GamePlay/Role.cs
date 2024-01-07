@@ -23,6 +23,7 @@ public class Role
     public string CharTitle;
     public string CharName;
 
+    //角色特性列表
     private List<BaseFeature> features = new List<BaseFeature>();
 
     //新增的变量
@@ -120,7 +121,7 @@ public class Role
         this.OwnComp.UpdataHealth();
     }
 
-    //添加buff
+    //添加buff给角色
     public void AddBuff(int buffId)
     {
         var buffData = Features_buffDataLoader.Instance.GetData(buffId);
