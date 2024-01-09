@@ -28,8 +28,8 @@ class BuffFeature : BaseFeature
     }
 }
 
-
-class HPBuff : BuffFeature
+//直接增加数值类BUFF
+class ValueBuff : BuffFeature
 {
 
     public float num = 0.3f;
@@ -38,4 +38,10 @@ class HPBuff : BuffFeature
     {
         this.OwnRole.MaxHp = (int)(this.OwnRole.MaxHp * (1 + num));
     }
+}
+
+//直接增加数值类百分比BUFF
+class ValuePercentBuff : BuffFeature
+{
+
 }
