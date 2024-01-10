@@ -23,8 +23,8 @@ public class Role
     public string CharTitle;
     public string CharName;
 
-    //角色特性列表
-    private List<BaseFeature> features = new List<BaseFeature>();
+    //角色特性Buff列表
+    public List<BaseFeature> features = new List<BaseFeature>();
 
     //新增的变量
     public int GroupID = 0;
@@ -139,12 +139,28 @@ public class Role
     //更新状态
     public void UpdataState()
     {
+        //在这里写上所有会被buff影响的属性数值
         this.MaxHp = this.attribute.Hp;
+        this.Speed = this.attribute.Speed;
+        this.MaxShield = this.attribute.Shields;
+        this.ActionNum = this.attribute.ActionNum;
+        this.HpRegeneration = this.attribute.HpRegeneration;
+        this.HpSteal = this.attribute.HpSteal;
+        this.ShieldsRegeneration = this.attribute.ShieldsRegeneration;
+        this.PhysicalIntensity = this.attribute.PhysicalIntensity;//物理强度
+        this.ManaIntensity = this.attribute.ManaIntensity;//魔法强度
+        this.ReligiousIntensity = this.attribute.ReligiousIntensity;//虔诚强度
+        this.ArmorIntensity = this.attribute.ArmorIntensity;//防御强度
+        this.CritRate = this.attribute.CritRate;
+        this.HitRate = this.attribute.HitRate;
+        this.DodgeRate = this.attribute.DodgeRate;//闪避率
+
+
         foreach (var feature in this.features)
         {
-            if (feature.GetFeatureType() == FeatureType.BUFF)
+            if (feature.GetFeatureType() == FeatureType.AddStatsValue)
             {
-                var buff = feature as BuffFeature;
+                var buff = feature as AddMaxHPValue;
                 buff.CalcBuff();
             }
         }
