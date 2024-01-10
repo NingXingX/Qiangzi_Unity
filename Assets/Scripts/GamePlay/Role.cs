@@ -126,7 +126,28 @@ public class Role
     {
         var buffData = Features_buffDataLoader.Instance.GetData(buffId);
 
-        string buffClassName = "HPBuff";
+        string buffClassName = "";
+
+        if (buffClassName == null || buffClassName == "")
+        {
+            return;
+        }
+
+        var buffType = Type.GetType(buffClassName);
+        var newBuff = Activator.CreateInstance(buffType) as BaseFeature;
+
+        newBuff.OwnRole = this;
+        this.features.Add(newBuff);
+
+        this.UpdataState();
+    }
+    public void AddBuff(string buffClassName)
+    {
+        if (buffClassName == null || buffClassName == "")
+        {
+            return;
+        }
+
         var buffType = Type.GetType(buffClassName);
         var newBuff = Activator.CreateInstance(buffType) as BaseFeature;
 

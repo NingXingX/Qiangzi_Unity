@@ -7,6 +7,8 @@ public class RoleComp : MonoBehaviour
 {
     public Role data;
 
+    public Image RoleImage;
+
     public Slider Health;
     public Image HealthFill;
 
@@ -34,6 +36,32 @@ public class RoleComp : MonoBehaviour
         }
         this.UpdataPosition();
         this.UpdataHealth();
+        this.UpdateImage();
+    }
+
+    public void UpdateImage()
+    {
+        string path = "ArtAssets/Character/" + this.data.Id.ToString();
+
+        var obj = Resources.Load(path);
+        if (obj == null)
+        {
+            Debug.LogWarning($"角色{this.data.Id}图片未找到");
+            return;
+        }
+        var tex = obj as Texture2D;
+        if (tex == null)
+        {
+            Debug.LogWarning("角色图片加载出错");
+            return;
+        }
+        var sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        if (sprite == null)
+        {
+            Debug.LogWarning("角色图片创建出错");
+            return;
+        }
+        this.RoleImage.sprite = sprite;
     }
 
     public void UpdataHealth()

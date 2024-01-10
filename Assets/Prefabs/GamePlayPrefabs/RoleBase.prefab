@@ -52,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1b2d50ca776ea4449bc297957e9b39a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoleImage: {fileID: 7115715507515159133}
   Health: {fileID: 7190686929024701592}
   HealthFill: {fileID: 6862508958360776336}
 --- !u!222 &8355621151078887241
