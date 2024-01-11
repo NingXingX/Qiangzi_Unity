@@ -2,26 +2,42 @@
 //特性类型
 public enum FeatureType
 {
-    //增加属性数值
-    AddStatsValue,
-    //增加属性数值百分比
+
+    //某个属性N获得百分比(1+X%)加成 —— —— 1
     AddStatsPercent,
-    //减少属性数值
-    ReduceStatsValue,
-    //减少属性数值百分比
+
+    //某个属性N获得百分比(1-X%)衰减 —— —— 2
     ReduceStatsPercent,
-    //攻击移动受击等时刻(概率或非概率)触发的特性
-    ProbabilisticTrigger,
-    //改变承受或造成伤害类型
-    ChangeDamageType,
-    //附带攻击特效类
-    AttackEffect,
-    //属性转化类，比如： 获得 物理强度20% 的 防御强度
-    AttributeConversion,
-    //固定某项属性
+
+    //所有武器在攻击时，额外造成N次X%的伤害(相当于伤害=(1+N*X%)*攻击力) —— —— 3
+    AllWeaponAttackEffects,
+
+    //某个属性N获得数值上的X加成 —— —— 4
+    AddStatsValue,
+
+    //某个属性N获得数值上的X衰减 —— —— 5
+    ReduceStatsValue,
+
+    //某个属性固定在X值，且永远不会改变 —— —— 6
     AttributeImmobilization,
-    //角色装备特定装备后触发的特性
-    EquipBySpecial
+
+    //某个属性获得某个属性A的X%加成 —— —— 7
+    AddAttributeConversion,
+
+    //某个属性获得某个属性A的X%衰减 —— —— 8
+    ReduceAttributeConversion,
+
+    //所有武器在攻击时，额外造成X%某种伤害 —— —— 9
+    WeaponBonusDamage,
+
+    //造成某种伤害时获得百分比加成 —— —— 10
+    SpecificDamageUp,
+
+    //造成某种伤害时获得百分比衰减 —— —— 11
+    SpecificDamageDown,
+
+    //所有武器在攻击时，额外攻击N次，有X%概率触发 —— —— 12
+    ExtraAttackCount
 
 }
 
@@ -35,22 +51,8 @@ public abstract class BaseFeature
 }
 
 
-//增加某项属性数值类
-class AddValueBuffFeature : BaseFeature
-{
-    public override FeatureType GetFeatureType()
-    {
-        return FeatureType.AddStatsValue;
-    }
-
-    public virtual void CalcBuff()
-    {
-        
-    }
-}
-
-//增加属性数值百分比类
-class AddValuePercentBuffFeature : BaseFeature
+//某个属性N获得百分比(1+X%)加成 —— —— 1
+class AddValuePercent : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -59,16 +61,16 @@ class AddValuePercentBuffFeature : BaseFeature
 
     public virtual void CalcBuff()
     {
-
+        
     }
 }
 
-//属性转化类
-class AttributeConversion : BaseFeature
+//某个属性N获得百分比(1-X%)衰减 —— —— 2
+class ReduceValuePercent : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
-        return FeatureType.AttributeConversion;
+        return FeatureType.ReduceStatsPercent;
     }
 
     public virtual void CalcBuff()
@@ -77,12 +79,12 @@ class AttributeConversion : BaseFeature
     }
 }
 
-//概率触发类
-class ProbabilisticBuff : BaseFeature
+//所有武器在攻击时，额外造成N次X%的伤害(相当于伤害=(1+N*X%)*攻击力) —— —— 3
+class AllWeaponEffect : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
-        return FeatureType.ProbabilisticTrigger;
+        return FeatureType.AllWeaponAttackEffects;
     }
 
     public virtual void CalcBuff()
@@ -91,8 +93,36 @@ class ProbabilisticBuff : BaseFeature
     }
 }
 
-//固定属性数值
-class AttributeImmobilizationBuff : BaseFeature
+//某个属性N获得数值上的X加成 —— —— 4
+class StatsAddValue : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.AddStatsValue;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//某个属性N获得数值上的X衰减 —— —— 5
+class StatsReduceValue : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.ReduceStatsValue;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//某个属性固定在X值，且永远不会改变 —— —— 6
+class ImmobilizationStats : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -105,11 +135,95 @@ class AttributeImmobilizationBuff : BaseFeature
     }
 }
 
+//某个属性获得某个属性A的X%加成 —— —— 7
+class AttributeConversionAdd : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.AddAttributeConversion;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//某个属性获得某个属性A的X%衰减 —— —— 8
+class AttributeConversionReduce : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.ReduceAttributeConversion;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//所有武器在攻击时，额外造成X%某种伤害 —— —— 9
+class WeaponDamageBonus : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.WeaponBonusDamage;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//造成某种伤害时获得百分比加成 —— —— 10
+class UpSpecificDamage : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.SpecificDamageUp;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//造成某种伤害时获得百分比衰减 —— —— 11
+class DownSpecificDamage : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.SpecificDamageDown;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
+//所有武器在攻击时，额外攻击N次，有X%概率触发 —— —— 12
+class ExtraCountAttack : BaseFeature
+{
+    public override FeatureType GetFeatureType()
+    {
+        return FeatureType.ExtraAttackCount;
+    }
+
+    public virtual void CalcBuff()
+    {
+
+    }
+}
+
 
 //———————————————————————— 以下为具体BUFF ——————————————————————————————————————
 
 //直接增加最大生命值的数值类BUFF
-class AddMaxHPValue : AddValueBuffFeature
+/*class AddMaxHPValue : AddValueBuffFeature
 {
 
     public float num = 0.3f;//这里读取这个Buff的数值
@@ -118,52 +232,5 @@ class AddMaxHPValue : AddValueBuffFeature
     {
         this.OwnRole.MaxHp = (int)(this.OwnRole.MaxHp * (1 + num));
     }
-}
-
-//获得 X% **强度 的 ** 强度
-class ConvertAtoB : AttributeConversion
-{
-    public float num = 0.2f;//转换数值的百分比 , 这里用物理强度的20%转化为防御强度举例子
-
-    public override void CalcBuff()
-    {
-        this.OwnRole.ArmorIntensity = (int)(1 + this.OwnRole.PhysicalIntensity * num);
-    }
-}
-
-//直接增加数值类百分比BUFF
-class AddArmorIntensityPercent : AddValuePercentBuffFeature
-{
-    public float num = 1f;//这里读取这个Buff的数值
-
-    public override void CalcBuff()
-    {
-        this.OwnRole.ArmorIntensity = (int)(1 + this.OwnRole.ArmorIntensity * num);
-    }
-}
-
-//攻击时概率触发的技能
-class AttackProbabilistic : ProbabilisticBuff
-{
-    public float num = 0.15f;//触发概率的值, 这里用15%再攻击一次演示
-
-    public override void CalcBuff()
-    {
-        
-    }
-
-}
-
-
-//固定某项属性大小
-class ImmobilizationSpeed : AttributeImmobilizationBuff
-{
-    public float num = 1f;//固定属性的值, 这里用 移速固定为 1 演示
-
-    public override void CalcBuff()
-    {
-        this.OwnRole.Speed = (int)(num);
-    }
-
-}
+}*/
 

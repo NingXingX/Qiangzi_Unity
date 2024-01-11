@@ -181,8 +181,8 @@ public class Role
         {
             if (feature.GetFeatureType() == FeatureType.AddStatsValue)
             {
-                var buff = feature as AddMaxHPValue;
-                buff.CalcBuff();
+                /*var buff = feature as AddMaxHPValue;*/
+                /*buff.CalcBuff();*/
             }
         }
     }

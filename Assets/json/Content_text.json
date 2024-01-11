@@ -2,8 +2,8 @@
     {
         "TextName": "CharTitle_001",
         "ContentType": 1,
-        "ChineseTranslate": "剑士",
-        "EnglishTranslate": "FootMan"
+        "ChineseTranslate": "战士",
+        "EnglishTranslate": "Warrior"
     },
     {
         "TextName": "CharTitle_002",
@@ -12,9 +12,27 @@
         "EnglishTranslate": "Archer"
     },
     {
+        "TextName": "CharTitle_003",
+        "ContentType": 1,
+        "ChineseTranslate": "游侠",
+        "EnglishTranslate": "Ranger"
+    },
+    {
+        "TextName": "CharTitle_004",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士",
+        "EnglishTranslate": "Swordsman"
+    },
+    {
+        "TextName": "CharTitle_005",
+        "ContentType": 1,
+        "ChineseTranslate": "铁甲兵",
+        "EnglishTranslate": "Ironclad"
+    },
+    {
         "TextName": "CharDes_001",
         "ContentType": 1,
-        "ChineseTranslate": "剑士的职业介绍",
+        "ChineseTranslate": "战士的职业介绍",
         "EnglishTranslate": "CharDes_001"
     },
     {
@@ -22,6 +40,24 @@
         "ContentType": 1,
         "ChineseTranslate": "弓手的职业介绍",
         "EnglishTranslate": "CharDes_002"
+    },
+    {
+        "TextName": "CharDes_003",
+        "ContentType": 1,
+        "ChineseTranslate": "游侠的职业介绍",
+        "EnglishTranslate": "CharDes_003"
+    },
+    {
+        "TextName": "CharDes_004",
+        "ContentType": 1,
+        "ChineseTranslate": "剑士的职业介绍",
+        "EnglishTranslate": "CharDes_004"
+    },
+    {
+        "TextName": "CharDes_005",
+        "ContentType": 1,
+        "ChineseTranslate": "铁甲兵的职业介绍",
+        "EnglishTranslate": "CharDes_005"
     },
     {
         "TextName": "CharName_001",
@@ -34,6 +70,24 @@
         "ContentType": 2,
         "ChineseTranslate": "CharName_002",
         "EnglishTranslate": "CharName_002"
+    },
+    {
+        "TextName": "CharName_003",
+        "ContentType": 2,
+        "ChineseTranslate": "CharName_003",
+        "EnglishTranslate": "CharName_003"
+    },
+    {
+        "TextName": "CharName_004",
+        "ContentType": 2,
+        "ChineseTranslate": "CharName_004",
+        "EnglishTranslate": "CharName_004"
+    },
+    {
+        "TextName": "CharName_005",
+        "ContentType": 2,
+        "ChineseTranslate": "CharName_005",
+        "EnglishTranslate": "CharName_005"
     },
     {
         "TextName": "AttrName_001",

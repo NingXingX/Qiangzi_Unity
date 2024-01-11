@@ -28,5 +28,50 @@
         "EquipWeaponNum": 2,
         "EquipArmorNum": 1,
         "EquipJewelNum": 1
+    },
+    {
+        "Id": 10003,
+        "CharTitle": "CharTitle_003",
+        "CharName": "CharName_003",
+        "CharDes": "CharDes_003",
+        "CharType": 1,
+        "CharSize": 1,
+        "CharAvatar": 10003,
+        "CharAttr": 10003,
+        "CharFeatures": 10003,
+        "CharAI": 1,
+        "EquipWeaponNum": 2,
+        "EquipArmorNum": 1,
+        "EquipJewelNum": 1
+    },
+    {
+        "Id": 10004,
+        "CharTitle": "CharTitle_004",
+        "CharName": "CharName_004",
+        "CharDes": "CharDes_004",
+        "CharType": 1,
+        "CharSize": 1,
+        "CharAvatar": 10004,
+        "CharAttr": 10004,
+        "CharFeatures": 10004,
+        "CharAI": 1,
+        "EquipWeaponNum": 2,
+        "EquipArmorNum": 1,
+        "EquipJewelNum": 1
+    },
+    {
+        "Id": 10005,
+        "CharTitle": "CharTitle_005",
+        "CharName": "CharName_005",
+        "CharDes": "CharDes_005",
+        "CharType": 1,
+        "CharSize": 1,
+        "CharAvatar": 10005,
+        "CharAttr": 10005,
+        "CharFeatures": 10005,
+        "CharAI": 1,
+        "EquipWeaponNum": 2,
+        "EquipArmorNum": 1,
+        "EquipJewelNum": 1
     }
 ]
