@@ -2,9 +2,10 @@
 //特性类型
 public enum FeatureType
 {
+    NULL,
 
     //某个属性N获得百分比(1+X%)加成 —— —— 1
-    AddStatsPercent,
+    AddValuePercent,
 
     //某个属性N获得百分比(1-X%)衰减 —— —— 2
     ReduceStatsPercent,
@@ -41,13 +42,41 @@ public enum FeatureType
 
 }
 
+public enum IndexToValue
+{
+    NULL,
+    NULL2,
+    MaxHp
+}
+
+
 
 //基础特性,所有BUFF的基类,所有BUFF的基类,所有BUFF的基类,所有BUFF的基类,所有BUFF的基类,所有BUFF的基类
 public abstract class BaseFeature
 {
     public Role OwnRole;
+    public int TargetValueId;
+    public float ChangeValue;
 
     abstract public FeatureType GetFeatureType();
+
+    public abstract void CalcBuff();
+
+    public int GetValue(int index)
+    {
+        var fieldName = ((IndexToValue)index).ToString();
+        var fieldInfo = typeof(Role).GetField(fieldName);
+
+        return (int)fieldInfo.GetValue(this.OwnRole);
+    }
+
+    public void SetValue(int index, int value)
+    {
+        var fieldName = ((IndexToValue)index).ToString();
+        var fieldInfo = typeof(Role).GetField(fieldName);
+
+        fieldInfo.SetValue(this.OwnRole, value);
+    }
 }
 
 
@@ -56,12 +85,13 @@ class AddValuePercent : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
-        return FeatureType.AddStatsPercent;
+        return FeatureType.AddValuePercent;
     }
-
-    public virtual void CalcBuff()
+    
+    public override void CalcBuff()
     {
-        
+        float oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(oldValue * (1f + this.ChangeValue)));
     }
 }
 
@@ -73,7 +103,7 @@ class ReduceValuePercent : BaseFeature
         return FeatureType.ReduceStatsPercent;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -87,7 +117,7 @@ class AllWeaponEffect : BaseFeature
         return FeatureType.AllWeaponAttackEffects;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -101,7 +131,7 @@ class StatsAddValue : BaseFeature
         return FeatureType.AddStatsValue;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -115,7 +145,7 @@ class StatsReduceValue : BaseFeature
         return FeatureType.ReduceStatsValue;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -129,7 +159,7 @@ class ImmobilizationStats : BaseFeature
         return FeatureType.AttributeImmobilization;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -143,7 +173,7 @@ class AttributeConversionAdd : BaseFeature
         return FeatureType.AddAttributeConversion;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -157,7 +187,7 @@ class AttributeConversionReduce : BaseFeature
         return FeatureType.ReduceAttributeConversion;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -171,7 +201,7 @@ class WeaponDamageBonus : BaseFeature
         return FeatureType.WeaponBonusDamage;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -185,7 +215,7 @@ class UpSpecificDamage : BaseFeature
         return FeatureType.SpecificDamageUp;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -199,7 +229,7 @@ class DownSpecificDamage : BaseFeature
         return FeatureType.SpecificDamageDown;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }
@@ -213,7 +243,7 @@ class ExtraCountAttack : BaseFeature
         return FeatureType.ExtraAttackCount;
     }
 
-    public virtual void CalcBuff()
+    public override void CalcBuff()
     {
 
     }

@@ -126,7 +126,11 @@ public class Role
     {
         var buffData = Features_buffDataLoader.Instance.GetData(buffId);
 
-        string buffClassName = "";
+        int buffClassId = buffData.Type;
+        string buffClassName = ((FeatureType)buffClassId).ToString();
+
+        int valueType = (int)buffData.Param[0];
+        float value = (float)buffData.Param[1];
 
         if (buffClassName == null || buffClassName == "")
         {
@@ -135,6 +139,9 @@ public class Role
 
         var buffType = Type.GetType(buffClassName);
         var newBuff = Activator.CreateInstance(buffType) as BaseFeature;
+
+        newBuff.TargetValueId = valueType;
+        newBuff.ChangeValue = value;
 
         newBuff.OwnRole = this;
         this.features.Add(newBuff);
@@ -179,10 +186,10 @@ public class Role
 
         foreach (var feature in this.features)
         {
-            if (feature.GetFeatureType() == FeatureType.AddStatsValue)
+            if (feature.GetFeatureType() == FeatureType.AddValuePercent)
             {
                 /*var buff = feature as AddMaxHPValue;*/
-                /*buff.CalcBuff();*/
+                feature.CalcBuff();
             }
         }
     }
