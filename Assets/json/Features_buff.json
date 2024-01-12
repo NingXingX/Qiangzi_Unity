@@ -163,5 +163,82 @@
         "FeatureName": "Features_1000202",
         "FeatureTips": "FeaturesDes_1000202",
         "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000301,
+        "Type": 1,
+        "Param": [
+            13,
+            0.2
+        ],
+        "FeatureName": "Features_1000301",
+        "FeatureTips": "FeaturesDes_1000301",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000302,
+        "Type": 10,
+        "Param": [
+            4,
+            0.1
+        ],
+        "FeatureName": "Features_1000302",
+        "FeatureTips": "FeaturesDes_1000302",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000401,
+        "Type": 7,
+        "Param": [
+            9,
+            0.2
+        ],
+        "FeatureName": "Features_1000401",
+        "FeatureTips": "FeaturesDes_1000401",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000402,
+        "Type": 12,
+        "Param": [
+            1,
+            0.15
+        ],
+        "FeatureName": "Features_1000402",
+        "FeatureTips": "FeaturesDes_1000402",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000403,
+        "Type": 9,
+        "Param": [
+            3,
+            0.2
+        ],
+        "FeatureName": "Features_1000403",
+        "FeatureTips": "FeaturesDes_1000403",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000501,
+        "Type": 1,
+        "Param": [
+            12,
+            1.0
+        ],
+        "FeatureName": "Features_1000501",
+        "FeatureTips": "FeaturesDes_1000501",
+        "FeatureTipsDetail": ""
+    },
+    {
+        "Id": 1000502,
+        "Type": 6,
+        "Param": [
+            8,
+            1.0
+        ],
+        "FeatureName": "Features_1000502",
+        "FeatureTips": "FeaturesDes_1000502",
+        "FeatureTipsDetail": ""
     }
 ]

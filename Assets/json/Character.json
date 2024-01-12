@@ -70,8 +70,8 @@
         "CharAttr": 10005,
         "CharFeatures": 10005,
         "CharAI": 1,
-        "EquipWeaponNum": 2,
-        "EquipArmorNum": 1,
+        "EquipWeaponNum": 1,
+        "EquipArmorNum": 2,
         "EquipJewelNum": 1
     }
 ]

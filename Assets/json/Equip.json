@@ -171,5 +171,32 @@
         "ArmorFeatures": [],
         "JewelBuff": [],
         "JewelFeatures": []
+    },
+    {
+        "Id": 10017,
+        "EuipType": 1,
+        "Grade": 1,
+        "EquipName": "EquipName_10017",
+        "price_buy": 10,
+        "price_sell": 5,
+        "Attack": 10,
+        "AttackBonus01": 0.6,
+        "AttackBonus02": 0,
+        "AttackBonus03": 0,
+        "AttackBonus04": 0,
+        "AttackSpeed": 1,
+        "AttackSpeedBonus": 0.6,
+        "AttackRange": 5,
+        "HitRate": 0.85,
+        "CritRate": 0.1,
+        "HpSteal": 0.05,
+        "WeaponBuff": [],
+        "WeaponFeatures": [],
+        "Armor": 0,
+        "ArmorRegeneration": 0,
+        "ArmorBuff": [],
+        "ArmorFeatures": [],
+        "JewelBuff": [],
+        "JewelFeatures": []
     }
 ]
