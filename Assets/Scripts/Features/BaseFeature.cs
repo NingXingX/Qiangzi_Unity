@@ -2,7 +2,8 @@
 //特性类型
 public enum FeatureType
 {
-    NULL,
+    //枚举第一项为空 —— —— 0
+    NULL, 
 
     //某个属性N获得百分比(1+X%)加成 —— —— 1
     AddValuePercent,
@@ -45,8 +46,21 @@ public enum FeatureType
 public enum IndexToValue
 {
     NULL,
-    NULL2,
-    MaxHp
+    MaxHp,
+    HpRegeneration,
+    HpSteal,
+    MaxShields,
+    ShieldsRegeneration,
+    ActionNum,//迅捷值
+    Speed,//移速
+    PhysicalIntensity,
+    ManaIntensity,
+    ReligiousIntensity,
+    ArmorIntensity,
+    CritRate,
+    HitRate,
+    DodgeRate
+
 }
 
 
@@ -90,13 +104,13 @@ class AddValuePercent : BaseFeature
     
     public override void CalcBuff()
     {
-        float oldValue = this.GetValue(this.TargetValueId);
+        int oldValue = this.GetValue(this.TargetValueId);
         this.SetValue(this.TargetValueId, (int)(oldValue * (1f + this.ChangeValue)));
     }
 }
 
 //某个属性N获得百分比(1-X%)衰减 —— —— 2
-class ReduceValuePercent : BaseFeature
+class ReduceStatsPercent : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -105,12 +119,13 @@ class ReduceValuePercent : BaseFeature
 
     public override void CalcBuff()
     {
-
+        int oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(oldValue * (1f - this.ChangeValue)));
     }
 }
 
 //所有武器在攻击时，额外造成N次X%的伤害(相当于伤害=(1+N*X%)*攻击力) —— —— 3
-class AllWeaponEffect : BaseFeature
+class AllWeaponAttackEffects : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -124,7 +139,7 @@ class AllWeaponEffect : BaseFeature
 }
 
 //某个属性N获得数值上的X加成 —— —— 4
-class StatsAddValue : BaseFeature
+class AddStatsValue : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -133,12 +148,13 @@ class StatsAddValue : BaseFeature
 
     public override void CalcBuff()
     {
-
+        int oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(oldValue + this.ChangeValue));
     }
 }
 
 //某个属性N获得数值上的X衰减 —— —— 5
-class StatsReduceValue : BaseFeature
+class ReduceStatsValue : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -147,12 +163,13 @@ class StatsReduceValue : BaseFeature
 
     public override void CalcBuff()
     {
-
+        int oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(oldValue - this.ChangeValue));
     }
 }
 
 //某个属性固定在X值，且永远不会改变 —— —— 6
-class ImmobilizationStats : BaseFeature
+class AttributeImmobilization : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -161,12 +178,13 @@ class ImmobilizationStats : BaseFeature
 
     public override void CalcBuff()
     {
-
+        int oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(this.ChangeValue));
     }
 }
 
 //某个属性获得某个属性A的X%加成 —— —— 7
-class AttributeConversionAdd : BaseFeature
+class AddAttributeConversion : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -175,12 +193,13 @@ class AttributeConversionAdd : BaseFeature
 
     public override void CalcBuff()
     {
-
+        int oldValue = this.GetValue(this.TargetValueId);
+        this.SetValue(this.TargetValueId, (int)(oldValue + this.ChangeValue));
     }
 }
 
 //某个属性获得某个属性A的X%衰减 —— —— 8
-class AttributeConversionReduce : BaseFeature
+class ReduceAttributeConversion : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -194,7 +213,7 @@ class AttributeConversionReduce : BaseFeature
 }
 
 //所有武器在攻击时，额外造成X%某种伤害 —— —— 9
-class WeaponDamageBonus : BaseFeature
+class WeaponBonusDamage : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -208,7 +227,7 @@ class WeaponDamageBonus : BaseFeature
 }
 
 //造成某种伤害时获得百分比加成 —— —— 10
-class UpSpecificDamage : BaseFeature
+class SpecificDamageUp : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -222,7 +241,7 @@ class UpSpecificDamage : BaseFeature
 }
 
 //造成某种伤害时获得百分比衰减 —— —— 11
-class DownSpecificDamage : BaseFeature
+class SpecificDamageDown : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -236,7 +255,7 @@ class DownSpecificDamage : BaseFeature
 }
 
 //所有武器在攻击时，额外攻击N次，有X%概率触发 —— —— 12
-class ExtraCountAttack : BaseFeature
+class ExtraAttackCount : BaseFeature
 {
     public override FeatureType GetFeatureType()
     {
@@ -249,18 +268,4 @@ class ExtraCountAttack : BaseFeature
     }
 }
 
-
-//———————————————————————— 以下为具体BUFF ——————————————————————————————————————
-
-//直接增加最大生命值的数值类BUFF
-/*class AddMaxHPValue : AddValueBuffFeature
-{
-
-    public float num = 0.3f;//这里读取这个Buff的数值
-
-    public override void CalcBuff()
-    {
-        this.OwnRole.MaxHp = (int)(this.OwnRole.MaxHp * (1 + num));
-    }
-}*/
 
