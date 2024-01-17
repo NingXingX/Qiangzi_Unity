@@ -10,13 +10,13 @@ public class CharacterManager : MonoBehaviour
 
     [Header("当前角色信息")]
     //当前角色ID
-    public static int nowChaID = 10001;
+    public static int nowChaID;
     //当前角色等级
-    public static int nowChaLevel = 10;
+    public static int nowChaLevel;
     //当前角色护盾值
-    public static int nowChaShieldValue = 5;
+    public static int nowChaShieldValue;
     //当前角色血量
-    public static int nowChaHpValue = 60;
+    public static int nowChaHpValue;
     #endregion
 
 

@@ -19,6 +19,9 @@ public class UIManager : MonoBehaviour
     //装备栏展示面板
     public static bool isEquipmentBarActive = false;
 
+    //伤害排行榜面板
+    public static bool isDamagePanel = true;
+
     //角色相关的变量
     [Header("角色相关变量")]
     public static int nowCharacterNumberInUI = 0;

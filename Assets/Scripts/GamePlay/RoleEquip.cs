@@ -10,6 +10,7 @@ public class RoleEquip
     public float AttackSpeed;
     public int AttackRange;
 
+    //初始化装备到角色上
     public void Init(int equipId, RoleComp ownComp)
     {
         this.equip = EquipDataLoader.Instance.GetData(equipId);

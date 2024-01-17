@@ -15,9 +15,12 @@ public class UIEvents : MonoBehaviour
     public GameObject chaEquipPanel;
     public bool isEquipPanelActive = false;
 
+    //得到伤害统计排行榜面板
+    public GameObject damageStatisticsPanel;
+    public bool isDamagePanelActive = true;
 
- 
-    
+
+        
 
     public void ToLevelSelect()
     {
@@ -142,4 +145,40 @@ public class UIEvents : MonoBehaviour
         //改变变量
         UIManager.isBagEquipInfoPanelActive = false;
     }
+
+    public void CloseDamagePanelController()
+    {
+        //得到伤害排行榜面板上的CanvasGroup组件
+        GameObject damagePanel = GameObject.Find("当前伤害排行榜面板");
+        CanvasGroup canvasGroup = damagePanel.GetComponent<CanvasGroup>();
+
+        // 设置透明度为0
+        canvasGroup.alpha = 0f;
+
+        // 禁用交互性
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+
+        //改变变量
+        UIManager.isDamagePanel = false;
+    }
+
+    public void OpenDamagePanelController()
+    {
+        //得到伤害排行榜面板上的CanvasGroup组件
+        GameObject damagePanel = GameObject.Find("当前伤害排行榜面板");
+        CanvasGroup canvasGroup = damagePanel.GetComponent<CanvasGroup>();
+
+        // 设置透明度为0
+        canvasGroup.alpha = 1f;
+
+        // 禁用交互性
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+
+        //改变变量
+        UIManager.isDamagePanel = true;
+    }
 }
+
+

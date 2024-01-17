@@ -6,9 +6,10 @@ public class ChaStatsPrefab : MonoBehaviour
 {
     [Header("UI组件")]
     //角色ID
-    public int CharacterID;
+    /*public int CharacterID;
     //角色等级
-    public int CharacterLevel;
+    public int CharacterLevel;*/
+
     //角色称号组件
     public Text titletext;
     //角色名称组件
@@ -94,7 +95,7 @@ public class ChaStatsPrefab : MonoBehaviour
             var character_AttributeData = Character_attributeDataLoader.Instance;
             //Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
             shieldSlider = shieldslider.GetComponent<Slider>();
-            float result = CharacterManager.nowChaShieldValue * 1.0f / role.Shields;
+            float result = role.Shields * 1.0f / role.MaxShield;
             shieldSlider.value = result;
             //print(shieldSlider.value);
         }
@@ -107,8 +108,7 @@ public class ChaStatsPrefab : MonoBehaviour
             var character_AttributeData = Character_attributeDataLoader.Instance;
             //Character_attributeData cha_attributeData = character_AttributeData.GetData(GroupID, ID);
             hpSlider = hpslider.GetComponent<Slider>();
-            float result = CharacterManager.nowChaHpValue * 1.0f / role.Hp;
-            shieldSlider.value = result;
+            float result = role.Hp * 1.0f / role.MaxHp;
             hpSlider.value = result;
             //print(hpSlider.value);
         }
@@ -163,6 +163,7 @@ public class ChaStatsPrefab : MonoBehaviour
     //    }
     //}
 
+    //选中当前角色传到UI中
     public void ChangeNowCharacterID()
     {
         this.OwnComp.RoleOnSelect(this.cachedRole);
