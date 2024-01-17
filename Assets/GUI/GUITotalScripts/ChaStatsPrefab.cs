@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 //角色状态栏预制体的脚本
-public class ChaStatsPrefab : MonoBehaviour
+public class ChaStatsPrefab : MonoBehaviour,IBeginDragHandler,IEndDragHandler
 {
+    public GameObject PlayerObject;
+
     [Header("UI组件")]
     //角色ID
     /*public int CharacterID;
@@ -167,5 +170,26 @@ public class ChaStatsPrefab : MonoBehaviour
     public void ChangeNowCharacterID()
     {
         this.OwnComp.RoleOnSelect(this.cachedRole);
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        CellComp cell = eventData.pointerEnter.GetComponent<CellComp>();
+        if (cell == null)
+        {
+            return;
+        }
+        RoleComp role = BoardMapCtrl.Instance.GetRoleByGid(this.cachedRole.Gid);
+        if (role == null)
+        {
+            this.cachedRole.ColPos = cell.Col_Id;
+            this.cachedRole.RowPos = cell.Row_Id;
+            BoardMapCtrl.Instance.SpawnRoleObject(this.PlayerObject, this.cachedRole.Gid);
+        }
     }
 }

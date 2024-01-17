@@ -773,12 +773,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 713b3ddc5030129428b3136b92047709, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterID: 10001
-  CharacterLevel: 3
+  PlayerObject: {fileID: 1312385491874206171, guid: 638f5c5ffb4a2a24a9474342d55a043a, type: 3}
   titletext: {fileID: 0}
   chaNametext: {fileID: 0}
   shieldSlider: {fileID: 0}
   hpSlider: {fileID: 0}
+  hpText: {fileID: 0}
+  shieldText: {fileID: 0}
   OwnComp: {fileID: 0}
 --- !u!114 &2059119198
 MonoBehaviour:

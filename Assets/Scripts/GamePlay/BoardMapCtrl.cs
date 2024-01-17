@@ -22,6 +22,8 @@ public class BoardMapCtrl : MonoBehaviour
 
     public UnityAction<CellComp, CellComp> ChooseTargetChange;
 
+    private Dictionary<ulong, RoleComp> roleCompDic = new Dictionary<ulong, RoleComp>();
+
     public CellComp ChooseTarget;
 
     private int cellWidth;
@@ -52,6 +54,7 @@ public class BoardMapCtrl : MonoBehaviour
         var comp = roleObject.GetComponent<RoleComp>();
         comp.InitObject(this.cellWidth, this.cellHeght);
         comp.BindData(gid);
+        this.roleCompDic[gid] = comp;
     }
 
     public ulong SpawnRole(GameObject role, int team, int characterId, int level = 1, int rowPos = 0, int colPos = 0)
@@ -73,6 +76,15 @@ public class BoardMapCtrl : MonoBehaviour
             }
         }
         return 0;
+    }
+    public RoleComp GetRoleByGid(ulong gid)
+    {
+        RoleComp ret;
+        if (this.roleCompDic.TryGetValue(gid, out ret))
+        {
+            return ret;
+        }
+        return null;
     }
 
     public void OnCellClick(int row, int col)

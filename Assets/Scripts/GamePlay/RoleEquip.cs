@@ -6,6 +6,7 @@ public class RoleEquip
     public RoleComp OwnComp;
 
     public int Id;
+    public int Type;
     public int BaseAttack;
     public float AttackSpeed;
     public int AttackRange;
@@ -24,5 +25,6 @@ public class RoleEquip
         this.BaseAttack = this.equip.Attack;
         this.AttackSpeed = this.equip.AttackSpeed;
         this.AttackRange = this.equip.AttackRange;
+        this.Type = this.equip.EuipType;
     }
 }
