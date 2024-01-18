@@ -164,6 +164,19 @@ public class Role
         this.UpdataState();
     }
 
+    public List<RoleEquip> GetEquipByType(int equipType)
+    {
+        List<RoleEquip> ret = new List<RoleEquip>();
+        foreach (var equip in this.EquipList)
+        {
+            if (equip.Type == equipType)
+            {
+                ret.Add(equip);
+            }
+        }
+        return ret;
+    }
+
     //更新状态
     public void UpdataState()
     {
