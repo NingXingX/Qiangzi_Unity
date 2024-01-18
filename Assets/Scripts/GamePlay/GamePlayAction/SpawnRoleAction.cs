@@ -18,14 +18,18 @@ public class SpawnRoleAction : FsmStateAction
         this.DebugSpawnRole(10004, 1, 1, 0, 2, new List<int> { 10011 }, new List<int> { 1000401,1000402, 1000403 });//½£Ê¿
         this.DebugSpawnRole(10005, 2, 1, 4, 5, new List<int> { 10012 }, new List<int> { 1000501, 1000502 });//Ìú¼×±ø£¨µÐÈË£©*/
 
+        RoleSystem.Instance.SpawnRole(1, 10001, 1, 0, 0);
+        RoleSystem.Instance.SpawnRole(1, 10002, 1, 0, 0);
         RoleSystem.Instance.SpawnRole(1, 10003, 1, 0, 0);
+        RoleSystem.Instance.SpawnRole(1, 10004, 1, 0, 0);
+        RoleSystem.Instance.SpawnRole(1, 10005, 1, 0, 0);
 
         int friendindex = 3;
         int enemyindex = 2;
-        for ( int i = 0; i < friendindex; i ++)
+        /*for ( int i = 0; i < friendindex; i ++)
         {
             TestRoleSpawn(1);
-        }
+        }*/
         for (int i = 0; i < enemyindex; i++)
         {
             TestRoleSpawn(2);

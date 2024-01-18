@@ -207,7 +207,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 382045389}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
         m_MethodName: SettingPanel
         m_Mode: 1
@@ -2065,7 +2065,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 382045389}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ChangeLevel, Assembly-CSharp
         m_MethodName: CancelButton
         m_Mode: 1
@@ -6857,110 +6857,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 367128442}
   m_CullTransparentMesh: 1
---- !u!1 &382045384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 382045390}
-  - component: {fileID: 382045389}
-  - component: {fileID: 382045388}
-  - component: {fileID: 382045387}
-  - component: {fileID: 382045386}
-  - component: {fileID: 382045385}
-  m_Layer: 0
-  m_Name: GameUIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &382045385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2e6090cd61ee854bb9a4c7b4e42fb7f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &382045386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b10b7cc32accac4fb287bca4a87f85d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 971580373}
-  bagEquipPrefab: {fileID: 7266447402639322808, guid: 3f8fdf911b85471408650a7fe33b5e68, type: 3}
---- !u!114 &382045387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5845362379dff64b9c6fa7e52c90f71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &382045388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc9ffe55ba66b0c4a99afc3b41025f03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &382045389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0e0396b80f2535439a9f17eff58edfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  settingPanel: {fileID: 1390410523}
-  isSettingPanelActive: 0
-  chaEquipPanel: {fileID: 1274512463}
-  isEquipPanelActive: 0
-  damageStatisticsPanel: {fileID: 0}
-  isDamagePanelActive: 1
---- !u!4 &382045390
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 382045384}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8239815, y: 1.3820984, z: 194.60498}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 940612992}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &385851002
 GameObject:
   m_ObjectHideFlags: 0
@@ -7174,7 +7070,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 382045389}
+        - m_Target: {fileID: 940612997}
           m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
           m_MethodName: DisplayChaEquipPanel
           m_Mode: 1
@@ -14843,7 +14739,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 382045389}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ChangeLevel, Assembly-CSharp
         m_MethodName: CancelButton
         m_Mode: 1
@@ -15875,6 +15771,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 940612992}
+  - component: {fileID: 940612997}
+  - component: {fileID: 940612996}
+  - component: {fileID: 940612995}
+  - component: {fileID: 940612994}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -15897,11 +15797,66 @@ Transform:
   - {fileID: 1668473171}
   - {fileID: 2047847784}
   - {fileID: 698972537}
-  - {fileID: 382045390}
   - {fileID: 1980449149}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &940612994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940612991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2e6090cd61ee854bb9a4c7b4e42fb7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &940612995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940612991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b10b7cc32accac4fb287bca4a87f85d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetObject: {fileID: 971580373}
+  bagEquipPrefab: {fileID: 7266447402639322808, guid: 3f8fdf911b85471408650a7fe33b5e68, type: 3}
+--- !u!114 &940612996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940612991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5845362379dff64b9c6fa7e52c90f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &940612997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940612991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0e0396b80f2535439a9f17eff58edfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  settingPanel: {fileID: 1390410523}
+  isSettingPanelActive: 0
+  chaEquipPanel: {fileID: 1274512463}
+  isEquipPanelActive: 0
+  damageStatisticsPanel: {fileID: 152078222}
+  isDamagePanelActive: 1
 --- !u!1 &955205733
 GameObject:
   m_ObjectHideFlags: 0
@@ -15960,7 +15915,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 382045389}
+        - m_Target: {fileID: 940612997}
           m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
           m_MethodName: EquipInfoController
           m_Mode: 1
@@ -16414,7 +16369,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 382045389}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: ChangeLevel, Assembly-CSharp
         m_MethodName: BackToMainMenu
         m_Mode: 1
@@ -20285,7 +20240,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274512463}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -21732,7 +21687,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 382045389}
+        - m_Target: {fileID: 940612997}
           m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
           m_MethodName: CloseDamagePanelController
           m_Mode: 1
@@ -24998,7 +24953,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 382045386}
+      - m_Target: {fileID: 940612995}
         m_TargetAssemblyTypeName: AddEquipTest, Assembly-CSharp
         m_MethodName: AddEquipToBag
         m_Mode: 1
@@ -25198,7 +25153,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 382045389}
+        - m_Target: {fileID: 940612997}
           m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
           m_MethodName: HideChaEquipPanel
           m_Mode: 1
@@ -26649,7 +26604,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 382045389}
+        - m_Target: {fileID: 940612997}
           m_TargetAssemblyTypeName: UIEvents, Assembly-CSharp
           m_MethodName: OpenDamagePanelController
           m_Mode: 1
@@ -31572,7 +31527,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 940612992}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1984069074
 GameObject:

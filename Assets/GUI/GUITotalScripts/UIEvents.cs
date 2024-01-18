@@ -29,7 +29,7 @@ public class UIEvents : MonoBehaviour
 
     public void ToReadyPhase()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("ReadyPhase");
     }
 
 
