@@ -67,6 +67,7 @@ public class FightAction:FsmStateAction
     private IEnumerator RoleAttack(Role role, RoleEquip equip, Role target)
     {
         target.GetHurt(equip.BaseAttack);
+        EventDispatcher.Instance.DispatchTargetEvent(role.Gid, TargetEvent.RoleAttackEvent);
         Debug.Log(string.Format("{0} use {1} attack {2}. damage{3} hurter leave {4}", role.Gid, equip.Id, target.Gid, equip.BaseAttack,target.Hp));
         yield return new WaitForSeconds(0.3f);
     }

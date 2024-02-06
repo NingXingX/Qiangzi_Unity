@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 364380525596659115}
   - component: {fileID: 8355621151078887241}
   - component: {fileID: 7115715507515159133}
+  - component: {fileID: 5674601869136683465}
   m_Layer: 0
   m_Name: RoleBase
   m_TagString: Untagged
@@ -55,6 +56,7 @@ MonoBehaviour:
   RoleImage: {fileID: 7115715507515159133}
   Health: {fileID: 7190686929024701592}
   HealthFill: {fileID: 6862508958360776336}
+  AnimatorCtrl: {fileID: 5674601869136683465}
 --- !u!222 &8355621151078887241
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -93,6 +95,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &5674601869136683465
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1312385491874206171}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!1 &2874342352465390491
 GameObject:
   m_ObjectHideFlags: 0

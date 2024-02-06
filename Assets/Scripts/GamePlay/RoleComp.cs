@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Playables;
+using UnityEngine.Animations;
 
 public class RoleComp : MonoBehaviour
 {
@@ -11,6 +14,9 @@ public class RoleComp : MonoBehaviour
 
     public Slider Health;
     public Image HealthFill;
+
+    private PlayableGraph playable;
+    private AnimationPlayableOutput output;
 
     private RectTransform root;
 
@@ -24,19 +30,70 @@ public class RoleComp : MonoBehaviour
         this.root.anchorMax = Vector2.zero;
         this.root.sizeDelta = new Vector2(cellWidth, cellHeight);
         this.root.anchoredPosition = Vector2.zero;
+
+        this.InitPlayAble();
+    }
+
+    public void InitPlayAble()
+    {
+        this.playable = PlayableGraph.Create();
+        this.output = AnimationPlayableOutput.Create(playable, "Animation", GetComponent<Animator>());
     }
 
     public void BindData(ulong gid)
     {
+        if (this.data != null)
+        {
+            this.UnBindData();
+        }
+
         Role role = RoleSystem.Instance.GetRoleByGid(gid);
         this.data = role;
         if (role.OwnComp != this)
         {
             role.BindComp(this);
         }
+        this.RegisterEvent();
         this.UpdataPosition();
         this.UpdataHealth();
         this.UpdateImage();
+    }
+
+    public void UnBindData()
+    {
+        this.UnRegisterEvent();
+    }
+
+    public void RegisterEvent()
+    {
+        EventDispatcher dispatcher = EventDispatcher.Instance;
+        dispatcher.RegisterTargetEvent(this.data.Gid, TargetEvent.RoleAttackEvent, this.PlayAttackAnimation);
+    }
+
+    public void UnRegisterEvent()
+    {
+        EventDispatcher dispatcher = EventDispatcher.Instance;
+        dispatcher.UnRegisterTargetEvent(this.data.Gid, TargetEvent.RoleAttackEvent);
+    }
+
+    IEnumerator WaitAnimationDone(Action callback)
+    {
+        while (!this.playable.IsDone())
+        {
+            yield return null;
+        }
+
+        callback.Invoke();
+        yield break;
+    }
+
+    public void PlayAttackAnimation(object param, Action callback)
+    {
+        AnimationClip clip = Resources.Load("ArtAssets/Animation/Test1") as AnimationClip;
+        var clipPlayable = AnimationClipPlayable.Create(playable, clip);
+        this.output.SetSourcePlayable(clipPlayable);
+        this.playable.Play();
+        this.StartCoroutine(WaitAnimationDone(callback));
     }
 
     public void UpdateImage()
