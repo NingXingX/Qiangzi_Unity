@@ -1,0 +1,12 @@
+[
+    {
+        "Id": 1,
+        "ParamName": "refreshPrice_ini",
+        "ParamValue": 1
+    },
+    {
+        "Id": 2,
+        "ParamName": "playerSquad_ini",
+        "ParamValue": "[301001,301002,301003]"
+    }
+]

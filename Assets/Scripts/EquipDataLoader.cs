@@ -6,8 +6,6 @@ public class EquipData
 	public int EuipType;
 	public int Grade;
 	public string EquipName;
-	public int price_buy;
-	public int price_sell;
 	public int Attack;
 	public float AttackBonus01;
 	public float AttackBonus02;
@@ -59,8 +57,6 @@ public class EquipDataLoader
 			JsonLoadHelper.GetValue(dict["EuipType"],ref dataNode.EuipType);
 			JsonLoadHelper.GetValue(dict["Grade"],ref dataNode.Grade);
 			JsonLoadHelper.GetValue(dict["EquipName"],ref dataNode.EquipName);
-			JsonLoadHelper.GetValue(dict["price_buy"],ref dataNode.price_buy);
-			JsonLoadHelper.GetValue(dict["price_sell"],ref dataNode.price_sell);
 			JsonLoadHelper.GetValue(dict["Attack"],ref dataNode.Attack);
 			JsonLoadHelper.GetValue(dict["AttackBonus01"],ref dataNode.AttackBonus01);
 			JsonLoadHelper.GetValue(dict["AttackBonus02"],ref dataNode.AttackBonus02);

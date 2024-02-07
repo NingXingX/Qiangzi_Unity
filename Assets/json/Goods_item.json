@@ -1,0 +1,82 @@
+[
+    {
+        "Id": 101001,
+        "price_buy_base": 10,
+        "price_sell_base": 5,
+        "goodsLevel": 1,
+        "GoodsType": 1,
+        "GoodsParam": 10011
+    },
+    {
+        "Id": 101002,
+        "price_buy_base": 15,
+        "price_sell_base": 10,
+        "goodsLevel": 2,
+        "GoodsType": 1,
+        "GoodsParam": 10012
+    },
+    {
+        "Id": 101003,
+        "price_buy_base": 30,
+        "price_sell_base": 15,
+        "goodsLevel": 3,
+        "GoodsType": 1,
+        "GoodsParam": 10013
+    },
+    {
+        "Id": 101004,
+        "price_buy_base": 85,
+        "price_sell_base": 40,
+        "goodsLevel": 4,
+        "GoodsType": 1,
+        "GoodsParam": 10014
+    },
+    {
+        "Id": 101005,
+        "price_buy_base": 85,
+        "price_sell_base": 40,
+        "goodsLevel": 4,
+        "GoodsType": 1,
+        "GoodsParam": 10015
+    },
+    {
+        "Id": 101006,
+        "price_buy_base": 120,
+        "price_sell_base": 60,
+        "goodsLevel": 5,
+        "GoodsType": 1,
+        "GoodsParam": 10016
+    },
+    {
+        "Id": 101007,
+        "price_buy_base": 10,
+        "price_sell_base": 5,
+        "goodsLevel": 1,
+        "GoodsType": 1,
+        "GoodsParam": 10017
+    },
+    {
+        "Id": 301001,
+        "price_buy_base": 50,
+        "price_sell_base": 0,
+        "goodsLevel": 2,
+        "GoodsType": 3,
+        "GoodsParam": 10001
+    },
+    {
+        "Id": 301002,
+        "price_buy_base": 50,
+        "price_sell_base": 0,
+        "goodsLevel": 2,
+        "GoodsType": 3,
+        "GoodsParam": 10002
+    },
+    {
+        "Id": 301003,
+        "price_buy_base": 50,
+        "price_sell_base": 0,
+        "goodsLevel": 2,
+        "GoodsType": 3,
+        "GoodsParam": 10003
+    }
+]
