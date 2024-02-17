@@ -87,9 +87,39 @@ public class RoleComp : MonoBehaviour
         yield break;
     }
 
+    public void PlayVFX(string vfxName)
+    {
+        //无作用，但必须要，防止unity报错
+    }
+
     public void PlayAttackAnimation(object param, Action callback)
     {
         AnimationClip clip = Resources.Load("ArtAssets/Animation/Test1") as AnimationClip;
+
+        AttackParam aparam = param as AttackParam;
+        BoardMapCtrl board = BoardMapCtrl.Instance;
+
+        foreach (var aevnet in clip.events)
+        {
+            if (aevnet.functionName == "PlayVFX")
+            {
+                float triggerT = aevnet.time;
+                string vfxName = aevnet.stringParameter;
+                VFXParam vparam = new VFXParam();
+                vparam.VFXName = vfxName;
+                vparam.AwaitTime = triggerT;
+                vparam.Length = aevnet.floatParameter;
+                if (aevnet.intParameter == 1)
+                {
+                    vparam.Path = new List<Vector2> { board.GetRoleLocalPosByGid(aparam.Hurter) };
+                }
+                else if (aevnet.intParameter == 2)
+                {
+                    vparam.Path = new List<Vector2> { board.GetRoleLocalPosByGid(aparam.Attacker), board.GetRoleLocalPosByGid(aparam.Hurter) };
+                }
+                EventDispatcher.Instance.DispatchGoblalEvent(GoblalEvent.PlayVFXEvent, vparam);
+            }
+        }
         var clipPlayable = AnimationClipPlayable.Create(playable, clip);
         this.output.SetSourcePlayable(clipPlayable);
         this.playable.Play();

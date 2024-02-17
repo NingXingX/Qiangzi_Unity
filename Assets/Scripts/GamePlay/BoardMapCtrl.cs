@@ -1,7 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+
+public class VFXParam
+{
+    public string VFXName;
+    public float Length;
+    public List<Vector2> Path;
+    public float AwaitTime;
+}
 
 public class BoardMapCtrl : MonoBehaviour
 {
@@ -33,12 +42,18 @@ public class BoardMapCtrl : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        this.InitVFX();
     }
 
     void Start()
     {
         this.ChooseTarget = null;
         this.InstantiateBoard();
+    }
+
+    private void OnDestroy()
+    {
+        this.UninitVFX();
     }
 
     public Vector2 CalcCellLocalPos(int row, int col)
@@ -87,6 +102,26 @@ public class BoardMapCtrl : MonoBehaviour
         return null;
     }
 
+    public Vector2 GetRolePosByGid(ulong gid)
+    {
+        RoleComp role = this.GetRoleByGid(gid);
+        if (role == null)
+        {
+            return Vector2.zero;
+        }
+        return new Vector2(role.data.RowPos, role.data.ColPos);
+    }
+
+    public Vector2 GetRoleLocalPosByGid(ulong gid)
+    {
+        RoleComp role = this.GetRoleByGid(gid);
+        if (role == null)
+        {
+            return Vector2.zero;
+        }
+        return this.CalcCellLocalPos(role.data.RowPos, role.data.ColPos);
+    }
+
     public void OnCellClick(int row, int col)
     {
         Debug.Log((row, col));
@@ -95,6 +130,47 @@ public class BoardMapCtrl : MonoBehaviour
         this.ChooseTarget = newTarget;
         this.ChooseTargetChange?.Invoke(oldTarget, newTarget);
     }
+
+    #region VFX
+
+    public void InitVFX()
+    {
+        EventDispatcher.Instance.RegisterGoblalEvent(GoblalEvent.PlayVFXEvent, BeginPlayVFX);
+    }
+
+    public void BeginPlayVFX(object param, Action callback)
+    {
+        VFXParam vfxParam = param as VFXParam;
+        if (vfxParam == null)
+        {
+            return;
+        }
+        StartCoroutine(PlayVFX(vfxParam));
+        //callback.Invoke();
+    }
+
+    IEnumerator PlayVFX(VFXParam param)
+    {
+        float t = 0;
+        while (t < param.AwaitTime)
+        {
+            yield return null;
+            t += Time.deltaTime;
+        }
+        GameObject vfxPrefab = Resources.Load("ArtAssets/VFX/" + param.VFXName) as GameObject;
+        VFXComp vfxObject = Instantiate(vfxPrefab, this.transform).GetComponent<VFXComp>();
+
+        vfxObject.Path = param.Path;
+        vfxObject.Length = param.Length;
+
+        yield break;
+    }
+
+    private void UninitVFX()
+    {
+        EventDispatcher.Instance.UnRegisterGoblalEvent(GoblalEvent.PlayVFXEvent, BeginPlayVFX);
+    }
+    #endregion
 
     #region Editor
     public void InstantiateBoard()

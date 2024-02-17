@@ -2,6 +2,12 @@
 using UnityEngine;
 using HutongGames.PlayMaker;
 
+public class AttackParam
+{
+    public ulong Attacker;
+    public ulong Hurter;
+}
+
 [ActionCategory("GamePlay")]
 public class FightAction:FsmStateAction
 {
@@ -55,6 +61,10 @@ public class FightAction:FsmStateAction
             {
                 continue;
             }
+            if (other.OwnComp == null)
+            {
+                continue;//临时处理BUG：未放置的角色仍会被攻击
+            }
             for (int i = 0; i < equip.AttackSpeed; ++i)
             {
                 yield return StartCoroutine(RoleAttack(role, equip, other));
@@ -67,7 +77,10 @@ public class FightAction:FsmStateAction
     private IEnumerator RoleAttack(Role role, RoleEquip equip, Role target)
     {
         target.GetHurt(equip.BaseAttack);
-        EventDispatcher.Instance.DispatchTargetEvent(role.Gid, TargetEvent.RoleAttackEvent);
+        AttackParam param = new AttackParam();
+        param.Attacker = role.Gid;
+        param.Hurter = target.Gid;
+        EventDispatcher.Instance.DispatchTargetEvent(role.Gid, TargetEvent.RoleAttackEvent, param);
         Debug.Log(string.Format("{0} use {1} attack {2}. damage{3} hurter leave {4}", role.Gid, equip.Id, target.Gid, equip.BaseAttack,target.Hp));
         yield return new WaitForSeconds(0.3f);
     }
